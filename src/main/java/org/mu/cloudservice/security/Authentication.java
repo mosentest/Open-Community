@@ -2,7 +2,7 @@ package org.mu.cloudservice.security;
 
 import java.util.Collection;
 
-import org.mu.opencomm.common.entity.User;
+import org.mu.cloudservice.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 
 public class Authentication extends org.springframework.security.core.userdetails.User {
@@ -10,10 +10,6 @@ public class Authentication extends org.springframework.security.core.userdetail
 	private static final long serialVersionUID = 6978257266007790166L;
 	
 	private User user;
-	
-	private boolean expired;
-	
-	private String latestMessage;
 
 	public Authentication(User user, String username, String password,
 			boolean enabled, boolean accountNonExpired,
@@ -22,23 +18,14 @@ public class Authentication extends org.springframework.security.core.userdetail
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired,
 				accountNonLocked, authorities);
 		this.user = user;
-		this.expired = false;
 	}
 	
 	public long getId() {
 		return user.getId();
 	}
 	
-	public String getPath() {
-		return user.getPath();
-	}
-	
 	public String getProfile() {
 		return user.getProfile();
-	}
-	
-	public void invalidate() {
-		expired = true;
 	}
 	
 	public User getUser() {
@@ -47,18 +34,6 @@ public class Authentication extends org.springframework.security.core.userdetail
 	
 	public String getAccount() {
 		return user.getAccount();
-	}
-	
-	public boolean isExpired() {
-		return expired;
-	}
-
-	public String getLatestMessage() {
-		return latestMessage;
-	}
-
-	public void setLatestMessage(String latestMessage) {
-		this.latestMessage = latestMessage;
 	}
 
 }

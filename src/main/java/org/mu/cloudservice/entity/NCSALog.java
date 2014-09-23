@@ -2,45 +2,25 @@ package org.mu.cloudservice.entity;
 
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-import org.mu.jmdb.annotations.Document;
-import org.mu.jmdb.annotations.Field;
-import org.mu.jmdb.core.Identifiable;
+public class NCSALog {
 
-@Document(collection = "ncsa_log", autoIndexId = false)
-public class NCSALog implements Identifiable {
-
-	@Field
 	private String remotehost;
 
-	@Field
 	private String ident;
 
-	@Field
 	private String authuser;
 
-	@Field
 	private Date date;
 
-	@Field
 	private RequestData request;
 
-	@Field
 	private int status;
 
-	@Field
 	private long bytes;
 
-	@Field
 	private String referrer;
 
-	@Field
 	private String agent;
-
-	@Override
-	public ObjectId getId() {
-		return null;
-	}
 
 	public String getRemotehost() {
 		return remotehost;

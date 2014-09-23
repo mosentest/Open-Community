@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mu.opencomm.code.entity.NCSALog;
-import org.mu.opencomm.code.entity.RequestData;
+import org.mu.cloudservice.entity.NCSALog;
+import org.mu.cloudservice.entity.RequestData;
 
 public class LogUtil {
 

@@ -1,8 +1,5 @@
 package org.mu.cloudservice.tag;
 
-import org.mu.opencomm.common.enumtype.FileType;
-import org.mu.opencomm.common.util.FileUtil;
-
 public class Function {
 
 	public static String maskURL(String string) {
@@ -25,12 +22,6 @@ public class Function {
 			return String.format("%.3f MB", (float) size / 1000000);
 		}
 		return "";
-	}
-	
-	public static String profile(String path) {
-		String fullPath = FileUtil.getPath(FileType.PROFILE, path);
-		return FileUtil.toDataURI(FileUtil.getFileAsStream(fullPath), 
-				path.substring(path.lastIndexOf('.') + 1));
 	}
 	
 }

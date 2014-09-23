@@ -1,6 +1,6 @@
 package org.mu.cloudservice.security;
 
-import org.mu.opencomm.common.constants.PropertiesManager;
+import org.mu.cloudservice.constants.PropertiesManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.mu.opencomm.common.enumtype.Relation;
-
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -3018705859017013707L;
@@ -31,12 +29,8 @@ public class User implements Serializable {
 	private int nFriends;
 	
 	private int nFans;
-	
-	private Relation relation;
-	
+
 	private List<Role> roles;
-	
-	private UserDetail detail;
 	
 	public User() {}
 
@@ -142,22 +136,6 @@ public class User implements Serializable {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	public Relation getRelation() {
-		return relation;
-	}
-
-	public void setRelation(Relation relation) {
-		this.relation = relation;
-	}
-
-	public UserDetail getDetail() {
-		return detail;
-	}
-
-	public void setDetail(UserDetail detail) {
-		this.detail = detail;
 	}
 
 }

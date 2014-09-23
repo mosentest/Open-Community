@@ -7,7 +7,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.mu.opencomm.common.util.DateUtil;
+import org.mu.cloudservice.utility.DateUtil;
 
 public class DateTag extends SimpleTagSupport {
 	

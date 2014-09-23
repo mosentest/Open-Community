@@ -1,12 +1,13 @@
 package org.mu.cloudservice.tag;
 
+import org.mu.cloudservice.utility.Page;
+
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-import org.mu.opencomm.common.dbutil.Page;
 
 /**
  * 页面的起始为0,页面总数为页面max(pn)+1

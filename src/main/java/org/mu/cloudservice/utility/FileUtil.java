@@ -11,8 +11,7 @@ import java.nio.file.Paths;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
-import org.mu.opencomm.common.constants.PropertiesManager;
-import org.mu.opencomm.common.enumtype.FileType;
+import org.mu.cloudservice.constants.PropertiesManager;
 
 public class FileUtil {
 
@@ -76,13 +75,13 @@ public class FileUtil {
 		return false;
 	}
 	
-	public static String getPath(FileType type, String file) {
-		return type.getPath() + "/" + file;
+	public static String getPath(String type, String file) {
+		return type + "/" + file;
 	}
 
-	public static String toFile(InputStream inputStream, FileType fileType, String path, String extension) throws IOException {
+	public static String toFile(InputStream inputStream, String fileType, String path, String extension) throws IOException {
 		try {
-			if (fileType == FileType.POST) {
+			if (fileType == "") {
 				File file = getPostFile(path, extension);
 				OutputStream outputStream = new FileOutputStream(file);
 				int read = 0;
@@ -100,7 +99,7 @@ public class FileUtil {
 	}
 	
 	public static File getPostFile(String path, String extension) throws IOException {
-		return File.createTempFile(path + "-", "." + extension, new File(FileType.POST.getPath()));
+		return File.createTempFile(path + "-", "." + extension, new File(""));
 	}
 
 	public static byte[] getFileAsStream(String fullPath) {

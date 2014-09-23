@@ -41,7 +41,7 @@
 	</bean>
 	
 	<mvc:interceptors>
-		<bean class="org.mu.opencomm.common.interceptor.AccessInterceptor"/>
+		<bean class="org.mu.cloudservice.interceptor.AccessInterceptor"/>
 	</mvc:interceptors>
 	
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">

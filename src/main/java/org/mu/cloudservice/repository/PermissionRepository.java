@@ -1,9 +1,9 @@
 package org.mu.cloudservice.repository;
 
-import java.util.List;
-
-import org.mu.opencomm.common.entity.Permission;
+import org.mu.cloudservice.entity.Permission;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("permissionRepository")
 public interface PermissionRepository {

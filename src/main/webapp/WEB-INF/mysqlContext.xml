@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx 
-		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-		http://www.springframework.org/schema/aop 
-		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
-		http://www.springframework.org/schema/context 
-		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:configs/dev.properties" />
@@ -27,11 +21,10 @@
 			<list>
 				<value>classpath*:dbMapper/code/*.xml</value>
 				<value>classpath*:dbMapper/common/*.xml</value>
-				<value>classpath*:dbMapper/coop/*.xml</value>
 			</list>
 		</property>
 		<property name="configLocation" value="/WEB-INF/mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="org.mu.opencomm.common.entity;org.mu.opencomm.coop.entity;org.mu.opencomm.code.entity;org.mu.pom.entity;" />
+		<property name="typeAliasesPackage" value="org.mu.cloudservice.entity;" />
 	</bean>
 
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
@@ -40,7 +33,7 @@
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 	    <property name="sqlSessionFactoryBeanName" value="mysqlSqlSessionFactory"></property>
-		<property name="basePackage" value="org.mu.opencomm.common.repository;org.mu.opencomm.coop.repository;org.mu.opencomm.code.repository" />
+		<property name="basePackage" value="org.mu.cloudservice.repository" />
 	</bean>
 
 	<bean id="mysqltransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

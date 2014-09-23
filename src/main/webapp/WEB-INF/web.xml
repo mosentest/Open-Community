@@ -42,25 +42,12 @@
 	<servlet>
 		<servlet-name>springDispatcherServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/scheduler.xml</param-value>
-		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springDispatcherServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<servlet-name>Kaptcha</servlet-name>
-		<servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Kaptcha</servlet-name>
-		<url-pattern>/kaptcha.jpg</url-pattern>
-	</servlet-mapping>
-	
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>/assets/img/*</url-pattern>

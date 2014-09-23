@@ -3,11 +3,11 @@ package org.mu.cloudservice.service;
 import java.util.Date;
 import java.util.List;
 
-import org.mu.opencomm.common.constants.PropertiesManager;
-import org.mu.opencomm.common.dto.UserDTO;
-import org.mu.opencomm.common.entity.User;
-import org.mu.opencomm.common.exception.InfoException;
-import org.mu.opencomm.common.repository.UserRepository;
+import org.mu.cloudservice.constants.PropertiesManager;
+import org.mu.cloudservice.dto.UserDTO;
+import org.mu.cloudservice.entity.User;
+import org.mu.cloudservice.exception.InfoException;
+import org.mu.cloudservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("userService")
 public class UserService {
 
-	@Autowired
 	private UserRepository userRepository;
 
 	private MessageDigestPasswordEncoder passwordEncoder;
@@ -28,21 +27,8 @@ public class UserService {
 		passwordEncoder = new Md5PasswordEncoder();
 	}
 	
-	@Transactional(readOnly = true)
-	public User getCompleteUser(long user, String path, long auth) throws Exception {
-		User object = userRepository.getCompleteUser(user, path);
-		if (object == null) {
-			throw new InfoException("User doesn't exist");
-		}
-		return object;
-	}
-	
 	public User getUser(long id) {
 		return userRepository.getUserById(id);
-	}
-	
-	public long getId(String path) {
-		return userRepository.getId(path);
 	}
 	
 	public User getUser(String account) {
@@ -58,10 +44,6 @@ public class UserService {
 		if (userRepository.getUserByEmail(user.getEmail()) != null) {
 			throw new InfoException("Email has already been registered.");
 		}
-		user.setPath(user.getPath().toLowerCase());
-		if (userRepository.getUserByPath(user.getPath()) != null) {
-			throw new InfoException("Path is not available.");
-		}
 		user.setCreate(new Date());
 		user.setUpdate(new Date());
 		user.setVerified(false);
@@ -72,43 +54,8 @@ public class UserService {
 			throw new InfoException("Unable to register.");
 		}
 	}
-	
-	public List<User> search(String query) {
-		return userRepository.search("%" + query + "%");
-	}
-	
-	public void addFriend(long user, long friend) throws InfoException {
-		try {
-			userRepository.addFriend(user, friend);
-		} catch (Exception e) {
-			throw new InfoException("Could not add user.");
-		}
-	}
-	
-	public void removeFriend(long user, long friend) throws InfoException {
-		userRepository.removeFriend(user, friend);
-	}
 
-	public List<User> getFriends(long user) {
-		return userRepository.getFriends(user);
-	}
-
-	public List<User> getFans(long user) {
-		return userRepository.getFans(user);
-	}
-	
-	public int countFriends(long user) {
-		return userRepository.countFriends(user);
-	}
-	
-	public int countFans(long user) {
-		return userRepository.countFans(user);
-	}
-	
-	public UserRepository getUserRepository() {
-		return userRepository;
-	}
-
+    @Autowired
 	public void setUserRepository(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}

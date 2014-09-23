@@ -1,6 +1,6 @@
 package org.mu.cloudservice.dto;
 
-import org.mu.opencomm.common.entity.User;
+import org.mu.cloudservice.entity.User;
 
 public class UserDTO implements DataTransferObject<User> {
 

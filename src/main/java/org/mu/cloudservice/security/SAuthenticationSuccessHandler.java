@@ -14,7 +14,7 @@ public class SAuthenticationSuccessHandler implements AuthenticationSuccessHandl
 	public void onAuthenticationSuccess(HttpServletRequest request,
 			HttpServletResponse response, org.springframework.security.core.Authentication auth)
 			throws IOException, ServletException {
-		response.sendRedirect(request.getContextPath() + "/source/index.html");
+		response.sendRedirect(request.getContextPath() + "/index.html");
 		
 	}
 

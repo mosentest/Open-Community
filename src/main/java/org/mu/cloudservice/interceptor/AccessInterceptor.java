@@ -3,8 +3,8 @@ package org.mu.cloudservice.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mu.opencomm.code.repository.NCSALogRepository;
-import org.mu.opencomm.common.util.LogUtil;
+import org.mu.cloudservice.repository.NCSALogRepository;
+import org.mu.cloudservice.utility.LogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

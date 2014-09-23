@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="CloudService:war exploded">
-    <output-path>$PROJECT_DIR$/target/source</output-path>
+    <output-path>$PROJECT_DIR$/target/cloudservice</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="CloudService/web/Web" />
       <element id="directory" name="WEB-INF">
@@ -50,7 +50,6 @@
           <element id="library" level="project" name="Maven: cglib:cglib:3.1" />
           <element id="library" level="project" name="Maven: org.ow2.asm:asm:4.2" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.32" />
-          <element id="library" level="project" name="Maven: org.mongodb:mongo-java-driver:2.12.3" />
           <element id="library" level="project" name="Maven: org.quartz-scheduler:quartz:1.8.6" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
         </element>

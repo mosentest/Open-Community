@@ -5,11 +5,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.mu.jmdb.core.MongoEntityManager;
-import org.mu.opencomm.common.entity.Permission;
-import org.mu.opencomm.common.entity.User;
-import org.mu.opencomm.common.repository.PermissionRepository;
-import org.mu.opencomm.common.repository.UserRepository;
+import org.mu.cloudservice.entity.Permission;
+import org.mu.cloudservice.entity.User;
+import org.mu.cloudservice.repository.PermissionRepository;
+import org.mu.cloudservice.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SUserDetailsService implements UserDetailsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(MongoEntityManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(SUserDetailsService.class);
 
 	@Resource
 	private UserRepository userRepository;

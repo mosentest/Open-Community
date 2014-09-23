@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/")
-public class ErrorController implements GenericController {
+public class ErrorController {
 
 	
 	@RequestMapping(value = "notfound.html", method = RequestMethod.GET)
