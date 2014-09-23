@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.opencomm.common.org.mu.cloudservice.repository.PermissionRepository" >
+	
+	<resultMap id="permissionMap" type="Permission">
+		<id property="id" column="id" />
+		<result property="permission" column="permission"/>
+		<result property="description" column="description"/>
+	</resultMap>
+	
+	<select id="getPermissions" resultMap="permissionMap">
+		SELECT * FROM permission
+		JOIN role_permission ON role_permission.permission_id = permission.id
+		JOIN user_role ON user_role.role_id = role_permission.role_id
+		WHERE user_role.user_id = #{user}
+	</select>
+
+</mapper>

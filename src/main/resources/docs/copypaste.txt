@@ -1,0 +1,6 @@
+//一些常用的东西复制到这里来,方便复制粘贴使用
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sf" uri="http://www.source.com/sourcefunction" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>

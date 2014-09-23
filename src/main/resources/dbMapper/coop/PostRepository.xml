@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.opencomm.coop.org.mu.cloudservice.repository.PostRepository" >
+	
+	<sql id="post">
+		SELECT
+			post.id AS id,
+			post.create_date AS create_date,
+			post.content AS content,
+			post.n_like AS n_like,
+			post.n_comment AS n_comment,
+			post.n_share AS n_share,
+			user.id AS user_id,
+			user.account AS user_account,
+			user.profile AS user_profile,
+			user.path AS user_path,
+			(SELECT COUNT(*) > 0 FROM post_like where post_like.post_id = post.id and user_id = #{auth}) AS liked
+		FROM 
+			post
+	</sql>
+	
+	<sql id="comment">
+		SELECT
+			post_comment.id AS id,
+			post_comment.create_date AS create_date,
+			post_comment.content AS content,
+			user.id AS user_id,
+			user.account AS user_account,
+			user.profile AS user_profile,
+			user.path AS user_path
+		FROM 
+			post_comment
+	</sql>
+
+	<resultMap id="postMap" type="Post">
+		<id property="id" column="id" />
+		<result property="content" column="content"/>
+		<result property="create" column="create_date"/>
+		<result property="nLike" column="n_like"/>
+		<result property="nShare" column="n_share"/>
+		<result property="nComment" column="n_comment"/>
+		<result property="mode" column="mode"/>
+		<result property="liked" column="liked"/>
+		<result property="repositoryUrl" column="repository_url"/>
+		<association property="user" javaType="User">
+			<id property="id" column="user_id"/>
+			<result property="path" column="user_path"/>
+			<result property="account" column="user_account"/>
+			<result property="profile" column="user_profile"/>
+		</association>
+	</resultMap>
+	
+	<resultMap id="commentMap" type="PostComment">
+		<id property="id" column="id" />
+		<result property="content" column="content"/>
+		<result property="create" column="create_date"/>
+		<association property="user" javaType="User">
+			<id property="id" column="user_id"/>
+			<result property="path" column="user_path"/>
+			<result property="account" column="user_account"/>
+			<result property="profile" column="user_profile"/>
+		</association>
+	</resultMap>
+	
+	<resultMap id="userMap" type="User">
+		<id property="id" column="id" />
+		<result property="account" column="account"/>
+		<result property="path" column="path"/>
+		<result property="profile" column="profile"/>
+	</resultMap>
+	
+	<select id="getPost" resultMap="postMap">
+		<include refid="post"/>
+		JOIN user ON user.id = post.user_id
+		WHERE post.id = #{post}
+	</select>
+	
+	<select id="getComment" resultMap="commentMap">
+		<include refid="comment"/>
+		JOIN user ON user.id = post_comment.user_id
+		WHERE post_comment.id = #{comment}
+	</select>
+	
+	<select id="getLikes" resultMap="userMap">
+		SELECT
+			id,
+			account,
+			path,
+			profile
+		FROM 
+			user
+		JOIN post_like ON post_like.user_id = user.id
+		WHERE post_like.post_id = #{post}
+		LIMIT #{offset}, #{size}
+	</select>
+
+	<insert id="like">
+		INSERT INTO post_like (user_id, post_id) VALUES (#{user}, #{post})
+	</insert>
+	
+	<delete id="dislike">
+		DELETE FROM post_like WHERE user_id = #{user} AND post_id = #{post}
+	</delete>
+
+	<insert id="createPost" parameterType="Post" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO post (user_id, create_date, content, n_like, n_comment, n_share)
+		VALUES (#{user.id}, #{create}, #{content}, #{nLike}, #{nComment}, #{nShare})
+	</insert>
+	
+	<insert id="createComment" parameterType="PostComment" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO post_comment (post_id, user_id, content, create_date)
+		VALUES (#{post}, #{user.id}, #{content}, #{create})
+	</insert>
+	
+	<select id="getWall" resultMap="postMap">
+		<include refid="post"/>
+		JOIN user ON user.id = post.user_id
+		WHERE post.user_id = #{user}
+		ORDER BY post.create_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="getPosts" resultMap="postMap">
+		<include refid="post"/>
+		JOIN user ON user.id = post.user_id
+		WHERE post.user_id = #{user}
+		ORDER BY post.create_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="getComments" resultMap="commentMap">
+		<include refid="comment"/>
+		JOIN user ON user.id = post_comment.user_id
+		WHERE post_id = #{post}
+		ORDER BY post_comment.create_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+</mapper>

@@ -1,0 +1,53 @@
+@charset "UTF-8";
+/*fix for bootstrap*/
+#content {
+	padding: 0px 20px;
+}
+ul.list-group .group-item-first {
+	border-radius: 0px;
+	border-top: none;
+}
+.none-border td {
+	border: none !important;
+}
+/*header footer*/
+header {
+	border-bottom: 1px solid #cccccc !important;
+}
+.footer {
+	background-color: #ffffff;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	margin-top: 100px;
+	color: #777;
+	text-align: center;
+	border-top: 1px solid #cccccc;
+}
+.footer-links {
+	padding-left: 0;
+	margin-top: 20px;
+	color: #999;
+}
+.footer-links li {
+	display: inline;
+	padding: 0px 2px;
+}
+.separator {
+	height: 15px;
+}
+.separator-high {
+	height: 30px;
+}
+.tab {
+	display: inline-block;
+	width: 15px;
+}
+.hidden {
+	display: none;
+}
+.clearfix {
+	clear: both;
+}
+.h-separator {
+	height: 20px;
+}

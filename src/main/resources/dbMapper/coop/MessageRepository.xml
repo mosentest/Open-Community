@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.opencomm.coop.org.mu.cloudservice.repository.MessageRepository" >
+
+	<sql id="select_conversation">
+		SELECT 
+			message_conversation.id AS id,
+			target_id, 
+			user_id, 
+			`read`,
+			message_conversation.create_date AS create_date,
+			message_conversation.update_date AS update_date,
+			n_message,
+			user.account AS user_account,
+			user.path AS user_path,
+			user.profile AS user_profile,
+			target.account AS target_account,
+			target.path AS target_path,
+			target.profile AS target_profile,
+			message.id AS message_id,
+			message.message AS message,
+			message.outward AS outward
+		FROM 
+			message_conversation
+	</sql>
+	
+	<sql id="select_message">
+		SELECT 
+			message.id AS id,
+			conversation_id, 
+			message, 
+			message.create_date AS create_date,
+			outward
+		FROM 
+			message
+	</sql>
+		
+	<resultMap id="conversationMap" type="MessageConversation">
+		<id property="id" column="id" />
+		<result property="read" column="read"/>
+		<result property="nMessage" column="n_message"/>
+		<result property="create" column="create_date"/>
+		<result property="update" column="update_date"/>
+		<association property="user" javaType="User">
+			<id property="id" column="user_id"/>
+			<result property="account" column="user_account"/>
+			<result property="path" column="user_path"/>
+			<result property="profile" column="user_profile"/>
+		</association>
+		<association property="target" javaType="User">
+			<id property="id" column="target_id"/>
+			<result property="account" column="target_account"/>
+			<result property="path" column="target_path"/>
+			<result property="profile" column="target_profile"/>
+		</association>
+		<association property="recentMessage" javaType="Message">
+			<id property="id" column="message_id"/>
+			<result property="message" column="message"/>
+			<result property="outward" column="outward"/>
+		</association>
+	</resultMap>
+		
+	<resultMap id="messageMap" type="Message">
+		<id property="id" column="id" />
+		<result property="conversationId" column="conversation_id"/>
+		<result property="message" column="message"/>
+		<result property="create" column="create_date"/>
+		<result property="outward" column="outward"/>
+	</resultMap>
+	
+	<update id="read">
+		UPDATE message_conversation SET `read` = TRUE WHERE id = #{id}
+	</update>
+	
+	<insert id="createConversation" parameterType="MessageConversation" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO message_conversation (user_id, target_id, create_date, update_date, `read`, n_message, target_del, user_del, recent_message)
+		VALUES (#{user.id}, #{target.id}, #{create}, #{update}, FALSE, 0, FALSE, FALSE, 0)
+	</insert>
+	
+	<insert id="createMessage" parameterType="Message" >
+		INSERT INTO message (conversation_id, message, create_date, outward) 
+		VALUES (#{conversationId}, #{message}, #{create}, #{outward})
+	</insert>
+	
+	<select id="getRecentMessage" resultMap="messageMap">
+		<include refid="select_message"/>
+		JOIN message_conversation ON message.id = message_conversation.recent_message
+		WHERE message_conversation.id = #{id} 
+		AND (message_conversation.user_id = #{user} OR message_conversation.target_id = #{user})
+	</select>
+	
+	<select id="getMessages" resultMap="messageMap">
+		<include refid="select_message"/>
+		JOIN message_conversation ON message.conversation_id = message_conversation.id
+		WHERE conversation_id = #{id} AND (message_conversation.user_id = #{user} OR message_conversation.target_id = #{user})
+		ORDER BY create_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="getConversation" resultMap="conversationMap">
+		<include refid="select_conversation"/>
+		JOIN user AS user ON user.id = message_conversation.user_id
+		JOIN user AS target ON target.id = message_conversation.target_id
+		JOIN message ON message.id = message_conversation.recent_message
+		WHERE message_conversation.id = #{id} AND 
+		(message_conversation.user_id = #{user} OR message_conversation.target_id = #{user})
+	</select>
+	
+	<select id="countUnread" parameterType="long" resultType="int">
+		SELECT COUNT(*) FROM message_conversation 
+		JOIN message ON message.id = message_conversation.recent_message
+		WHERE `read` = FALSE 
+		AND ((user_id = #{user} AND user_del = FALSE) OR (target_id = #{user} AND target_del = FALSE))
+	</select>
+	
+	<select id="countAll" parameterType="long" resultType="int">
+		SELECT COUNT(*) FROM message_conversation WHERE (user_id = #{user} AND user_del = FALSE) OR (target_id = #{user} AND target_del = FALSE)
+	</select>
+	
+	<select id="getAll" resultMap="conversationMap">
+		<include refid="select_conversation"/>
+		JOIN user AS user ON user.id = message_conversation.user_id
+		JOIN user AS target ON target.id = message_conversation.target_id
+		JOIN message ON message.id = message_conversation.recent_message
+		WHERE (user_id = #{user} AND user_del = FALSE) OR (target_id = #{user} AND target_del = FALSE)
+		ORDER BY message_conversation.update_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="getUnread" resultMap="conversationMap">
+		<include refid="select_conversation"/>
+		JOIN user AS user ON user.id = message_conversation.user_id
+		JOIN user AS target ON target.id = message_conversation.target_id
+		JOIN message ON message.id = message_conversation.recent_message
+		WHERE `read` = FALSE AND ((user_id = #{user} AND user_del = FALSE) OR (target_id = #{user} AND target_del = FALSE))
+		ORDER BY message_conversation.update_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+
+</mapper>

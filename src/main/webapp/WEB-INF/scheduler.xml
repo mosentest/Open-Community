@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="tagScheduler" class="org.mu.opencomm.code.service.TagScheduler"/>  
+	<bean id="log" 
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+		<property name="targetObject">  
+			<ref bean="tagScheduler"/>  
+		</property>  
+		<property name="targetMethod">
+			<value>log</value>  
+		</property>  
+	</bean>
+	
+	<bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+		<property name="jobDetail" ref="log"/>  
+		<property name="cronExpression" value="0 58 23 * * ?"/><!-- triggers everyday at 23:58 -->
+	</bean>
+	
+	<bean id="SpringJobSchedulerFactoryBean" 
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+		<property name="triggers">  
+			<list>  
+				<ref bean="CronTriggerBean"/>  
+			</list>  
+		</property>  
+		<property name="taskExecutor" ref="executor"></property>
+	</bean>
+	
+	<bean id="executor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10" />
+		<property name="maxPoolSize" value="100" />
+		<property name="queueCapacity" value="500" />
+	</bean>
+</beans>

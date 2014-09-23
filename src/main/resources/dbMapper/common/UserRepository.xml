@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.opencomm.common.org.mu.cloudservice.repository.UserRepository" >
+
+	<sql id="minimal">
+		SELECT 
+			id,
+			account,
+			path,
+			profile,
+			verified,
+			create_date,
+			update_date,
+			n_friends,
+			n_fans
+		FROM 
+			user
+	</sql>
+	
+	<sql id="complete">
+		SELECT 
+			user.id AS id,
+			account,
+			path,
+			profile,
+			user.verified,
+			create_date,
+			update_date,
+			n_friends,
+			n_fans,
+			user_detail.role AS role,
+			user_detail.gender AS gender,
+			company.name AS company,
+			company.verified AS company_verified,
+			country.name AS country,
+			city.name AS city,
+			user_detail.tag AS tag
+		FROM 
+			user
+	</sql>
+	
+	<resultMap id="simpleUserMap" type="User">
+		<id property="id" column="id" />
+		<result property="account" column="account"/>
+		<result property="profile" column="profile"/>
+		<result property="create" column="create_date"/>
+		<result property="update" column="update_date"/>
+		<result property="nFriends" column="n_friends"/>
+		<result property="nFans" column="n_fans"/>
+		<result property="path" column="path"/>
+	</resultMap>
+		
+	<resultMap id="userMap" type="User">
+		<id property="id" column="id" />
+		<result property="email" column="email"/>
+		<result property="account" column="account"/>
+		<result property="relation" column="relation"/>
+		<result property="password" column="password"/>
+		<result property="verified" column="verified"/>
+		<result property="profile" column="profile"/>
+		<result property="nFriends" column="n_friends"/>
+		<result property="nFans" column="n_fans"/>
+		<result property="create" column="create_date"/>
+		<result property="update" column="updat_datee"/>
+		<result property="password" column="password"/>
+		<result property="path" column="path"/>
+		<association property="detail" javaType="UserDetail">
+			<id property="id" column="user_id"/>
+			<result property="role" column="role"/>
+			<result property="gender" column="gender"/>
+			<result property="company" column="company"/>
+			<result property="company_verified" column="companyVerified"/>
+			<result property="country" column="country"/>
+			<result property="city" column="city"/>
+			<result property="tag" column="tag"/>
+		</association>
+	</resultMap>
+	
+	<select id="getCompleteUser" resultMap="userMap">
+		<include refid="complete"/>
+		JOIN user_detail ON user_detail.user_id = user.id
+		LEFT JOIN country ON country.id = user_detail.country_id
+		LEFT JOIN city ON city.id = user_detail.city_id
+		LEFT JOIN company ON company.id = user_detail.company_id
+		WHERE 
+		<if test="user != 0">user.id = #{user}</if>
+		<if test="path != null">user.path = #{path}</if>
+	</select>
+	
+	<select id="search" resultMap="simpleUserMap">
+		<include refid="minimal"/>
+		WHERE account LIKE #{query} OR email LIKE #{query}
+		ORDER BY n_fans DESC 
+		LIMIT 10
+	</select>
+	
+	<select id="getUser" resultMap="userMap">
+		SELECT * FROM user WHERE email = #{username} OR account = #{username}
+	</select>
+	
+	<select id="getUserById" resultMap="userMap">
+		<include refid="minimal"/> 
+		WHERE id = #{id}
+	</select>
+	
+	<select id="countFriends" resultType="int">
+		SELECT n_friends FROM user WHERE id = #{user}
+	</select>
+	
+	<select id="countFans" resultType="int">
+		SELECT n_fans FROM user WHERE id = #{user}
+	</select>
+	
+	<select id="getFriends" resultMap="simpleUserMap">
+		<include refid="minimal"/>
+		JOIN user_relation ON user_relation.target_id = user.id
+		WHERE user_relation.user_id = #{user}
+	</select>
+	
+	<select id="getFans" resultMap="simpleUserMap">
+		<include refid="minimal"/> 
+		JOIN user_relation ON user_relation.user_id = user.id
+		WHERE user_relation.target_id = #{user}
+	</select>
+	
+	<select id="getUserByEmail" resultMap="simpleUserMap">
+		<include refid="minimal"/> 
+		WHERE email = #{email}
+	</select>
+	
+	<select id="getUserByAccount" resultMap="simpleUserMap">
+		<include refid="minimal"/> 
+		WHERE account = #{account}
+	</select>
+	
+	<select id="getUserByPath" resultMap="simpleUserMap">
+		<include refid="minimal"/>
+		WHERE path = #{path}
+	</select>
+	
+	<insert id="addFriend">
+		INSERT INTO user_relation (user_id, target_id) VALUES (#{user}, #{friend})
+	</insert>
+	
+	<insert id="removeFriend">
+		DELETE FROM user_relation WHERE user_id = #{user} AND target_id = #{friend}
+	</insert>
+	
+	<insert id="register" parameterType="User">
+		INSERT INTO user (account, email, password, path, create_date, update_date, verified, profile, n_friends, n_fans) VALUES
+		(#{account}, #{email}, #{password}, #{path}, #{create}, #{update}, FALSE, #{profile}, 0, 0)
+	</insert>
+	
+	<select id="getId" parameterType="string" resultType="long">
+		SELECT id FROM user WHERE path = #{path}
+	</select>
+
+</mapper>
