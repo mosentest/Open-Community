@@ -19,13 +19,14 @@
 		<property name="dataSource" ref="druid" />
 		<property name="mapperLocations">
 			<list>
-				<value>classpath*:dbMapper/code/*.xml</value>
+                <value>classpath*:dbMapper/blog/*.xml</value>
+                <value>classpath*:dbMapper/code/*.xml</value>
 				<value>classpath*:dbMapper/common/*.xml</value>
-				<value>classpath*:dbMapper/coop/*.xml</value>
+                <value>classpath*:dbMapper/coop/*.xml</value>
 			</list>
 		</property>
 		<property name="configLocation" value="/WEB-INF/mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="org.mu.community.common.entity;org.mu.community.coop.entity;org.mu.community.code.entity;org.mu.pom.entity;" />
+		<property name="typeAliasesPackage" value="org.mu.community.common.entity;org.mu.community.coop.entity;org.mu.pom.entity;org.mu.community.blog.entity;org.mu.community.code.entity;" />
 	</bean>
 
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
@@ -34,7 +35,7 @@
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 	    <property name="sqlSessionFactoryBeanName" value="mysqlSqlSessionFactory"></property>
-		<property name="basePackage" value="org.mu.community.common.repository;org.mu.community.coop.repository;org.mu.community.code.repository" />
+		<property name="basePackage" value="org.mu.community.common.repository;org.mu.community.coop.repository;org.mu.community.code.repository;org.mu.community.blog.repository" />
 	</bean>
 
 	<bean id="mysqltransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
