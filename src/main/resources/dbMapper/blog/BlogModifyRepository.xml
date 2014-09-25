@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.community.blog.repository.BlogModifyRepository" >
+
+    <insert id="createBlog" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog (user_id, category_id, `top`, create_date, updat_date, title, summary, content, n_like, n_view, n_reply)
+        VALUES (#{user.id}, #{category.id}, #{top}, #{create}, #{update}, #{title}, #{summary}, #{content}, 0, 0, 0)
+    </insert>
+
+    <insert id="createCategory" parameterType="BlogCategory" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_category (user_id, name, n_blog) VALUES (#{user}, #{name}, 0)
+    </insert>
+
+    <insert id="createComment" parameterType="BlogComment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_comment (blog_id, user_id, create_date, content, n_like, n_reply)
+        VALUES (#{blog}, #{user.id}, #{create}, #{content}, 0, 0)
+    </insert>
+
+    <insert id="createReply" parameterType="BlogReply" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_reply (blog_id, comment_id, user_id, create_date, content)
+        VALUES (#{blog}, #{comment}, #{user.id}, #{create}, #{content})
+    </insert>
+
+    <delete id="deleteCategory">
+        DELETE FROM blog_category WHERE id = #{category} AND user_id = #{user}
+    </delete>
+
+    <delete id="deleteBlog">
+        DELETE FROM blog WHERE id = #{blog} AND user_id = #{user}
+    </delete>
+
+    <delete id="deleteComment">
+        DELETE FROM blog_comment WHERE id = #{comment}
+    </delete>
+
+    <delete id="deleteReply">
+        DELETE FROM blog_reply WHERE id = #{reply}
+    </delete>
+
+    <insert id="likeBlog">
+        INSERT INTO blog_like (blog_id, user_id) VALUES (#{blog}, #{user})
+    </insert>
+
+    <insert id="likeComment">
+        INSERT INTO blog_comment_like (comment_id, user_id) VALUES (#{comment}, #{user})
+    </insert>
+
+    <delete id="dislikeBlog">
+        DELETE FROM blog_like WHERE blog_id = #{blog} AND user_id = #{user}
+    </delete>
+
+    <delete id="dislikeComment">
+        DELETE FROM blog_comment_like WHERE comment_id = #{comment} AND user_id = #{user}
+    </delete>
+</mapper>

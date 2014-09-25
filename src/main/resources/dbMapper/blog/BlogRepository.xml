@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.community.blog.repository.BlogRepository" >
+
+    <select id="blog">
+      SELECT
+        blog.id,
+        blog.`top`,
+        blog.create_date,
+        blog.update_date,
+        blog.title,
+        blog.summary,
+        blog.content,
+        blog.n_like,
+        blog.n_view,
+        blog.n_reply,
+        blog_category.id AS category_id,
+        blog_category.name AS category_name,
+        user.id AS user_id,
+        user.account AS user_account,
+        user.path AS user_path,
+        user.profile AS user_profile,
+		(SELECT COUNT(*) > 0 FROM blog_like where blog_like.blog_id = blog.id and blog_like.user_id = #{auth}) AS liked
+      FROM blog
+      JOIN user ON user.id = blog.user_id
+      JOIN blog_category ON blog_category.id = blog.category_id
+    </select>
+
+    <select id="minimalBlog">
+      SELECT
+        blog.id,
+        blog.`top`,
+        blog.create_date,
+        blog.title,
+        blog.summary,
+        blog.n_like,
+        blog.n_view,
+        blog.n_reply,
+        user.id AS user_id,
+        user.account AS user_account,
+        user.path AS user_path,
+        user.profile AS user_profile
+      FROM blog
+      JOIN user ON user.id = blog.user_id
+      JOIN blog_category ON blog_category.id = blog.category_id
+    </select>
+
+    <select id="comment">
+      SELECT
+        blog_comment.id,
+        blog_comment.blog_id,
+        blog_comment.create_date,
+        blog_comment.content,
+        blog_comment.n_like,
+        blog_comment.n_reply,
+        user.id AS user_id,
+        user.account AS user_account,
+        user.path AS user_path,
+        user.profile AS user_profile,
+	    (SELECT COUNT(*) > 0 FROM blog_comment_like where blog_comment_like.comment_id = blog_comment.id and blog_comment_like.user_id = #{auth}) AS liked
+      FROM blog_comment
+      JOIN user ON user.id = blog.user_id
+    </select>
+
+    <select id="category">
+      SELECT
+        id,
+        name,
+        n_blog
+      FROM blog_category
+    </select>
+
+    <select id="reply">
+      SELECT
+        blog_reply.id,
+        blog_reply.blog_id,
+        blog_reply.comment_id,
+        blog_reply.create_date,
+        blog_reply.content
+        user.id AS user_id,
+        user.account AS user_account,
+        user.path AS user_path,
+        user.profile AS user_profile
+      FROM blog_reply
+      JOIN user ON user.id = blog_reply.user_id
+    </select>
+
+    <resultMap id="blogMap" type="Blog">
+        <id property="id" column="id" />
+        <result property="create" column="create_date"/>
+        <result property="update" column="update_date"/>
+        <result property="top" column="top"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="content" column="content"/>
+        <result property="nLike" column="n_like"/>
+        <result property="nView" column="n_view"/>
+        <result property="nReply" column="n_reply"/>
+        <association property="category" javaType="BlogCategory">
+            <id property="id" column="category_id"/>
+            <result property="name" column="category_name"/>
+        </association>
+        <association property="user" javaType="User">
+            <id property="id" column="user_id"/>
+            <result property="account" column="user_account"/>
+            <result property="path" column="user_path"/>
+            <result property="profile" column="user_profile"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="commentMap" type="BlogComment">
+        <id property="id" column="id" />
+        <result property="create" column="create_date"/>
+        <result property="update" column="update_date"/>
+        <result property="content" column="content"/>
+        <result property="nLike" column="n_like"/>
+        <result property="nReply" column="n_reply"/>
+        <association property="user" javaType="User">
+            <id property="id" column="user_id"/>
+            <result property="account" column="user_account"/>
+            <result property="path" column="user_path"/>
+            <result property="profile" column="user_profile"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="categoryMap" type="BlogCategory">
+        <id property="id" column="id" />
+        <result property="name" column="name"/>
+        <result property="nBlog" column="n_blog"/>
+    </resultMap>
+
+    <resultMap id="replyMap" type="BlogReply">
+        <id property="id" column="id" />
+        <result property="comment" column="comment_id"/>
+        <result property="create" column="create_date"/>
+        <result property="content" column="content"/>
+        <association property="user" javaType="User">
+            <id property="id" column="user_id"/>
+            <result property="account" column="user_account"/>
+            <result property="path" column="user_path"/>
+            <result property="profile" column="user_profile"/>
+        </association>
+    </resultMap>
+
+    <select id="getCategories" resultMap="categoryMap">
+        <include refid="category"/>
+        WHERE blog_category.user_id = #{user}
+    </select>
+
+    <select id="countBlogByMonth" resultType="int">
+        SELECT COUNT(*) FROM blog WHERE blog.user_id = #{user} AND <![CDATA[ blog.create_date >= #{from} AND blog.create_date <= #{to} ]]>
+    </select>
+
+    <select id="getBlogsByUser" resultMap="blogMap">
+        <include refid="minimalBlog"/>
+        WHERE blog.user_id = #{user}
+        ORDER BY blog.create_date
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getBlogByCategory" resultMap="blogMap">
+        <include refid="minimalBlog"/>
+        WHERE blog.user_id = #{user} AND blog.category_id = #{category}
+        ORDER BY blog.create_date
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getBlogByMonth" resultMap="blogMap">
+        <include refid="minimalBlog"/>
+        WHERE blog.user_id = #{user} AND <![CDATA[ blog.create_date >= #{from} AND blog.create_date <= #{to} ]]>
+        ORDER BY blog.create_date
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getBlog" resultMap="blogMap">
+        <include refid="blog"/>
+        WHERE blog.id = #{blog} AND blog.user_id = #{user}
+    </select>
+
+    <select id="getBlogComments" resultMap="commentMap">
+        <include refid="comment"/>
+        WHERE blog_comment.blog_id = #{blog}
+        ORDER BY blog_comment.create_date
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getCommentReplies" resultMap="replyMap">
+        <include refid="reply"/>
+        WHERE blog_reply.comment_id = #{comment}
+        ORDER BY blog_reply.create_date
+        LIMIT #{offset}, #{size}
+    </select>
+
+</mapper>
