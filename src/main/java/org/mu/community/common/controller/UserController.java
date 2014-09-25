@@ -22,14 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/coop/")
 public class UserController {
-	
-	@Autowired
+
 	private UserService userService;
 
-	@Autowired
 	private ProjectService projectService;
 
-	@Autowired
 	private PostService postService;
 
 	@RequestMapping(value = "u/{path}", method = RequestMethod.GET)
@@ -133,14 +130,17 @@ public class UserController {
 		return response;
 	}
 
+    @Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
+    @Autowired
 	public void setProjectService(ProjectService projectService) {
 		this.projectService = projectService;
 	}
 
+    @Autowired
 	public void setPostService(PostService postService) {
 		this.postService = postService;
 	}

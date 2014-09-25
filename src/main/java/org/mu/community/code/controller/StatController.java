@@ -19,10 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/statistics/")
 public class StatController {
 
-	@Autowired
 	private StatService statService;
 
-	@Autowired
 	private JavaLibraryService javaLibraryService;
 
 	@RequestMapping(value = "download.html", method = RequestMethod.GET)
@@ -60,11 +58,13 @@ public class StatController {
 		}
 		return new ModelAndView("source/downloadstat", model);
 	}
-	
+
+    @Autowired
 	public void setStatService(StatService statService) {
 		this.statService = statService;
 	}
 
+    @Autowired
 	public void setJavaLibraryService(JavaLibraryService javaLibraryService) {
 		this.javaLibraryService = javaLibraryService;
 	}

@@ -16,11 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("messageService")
 public class MessageService {
-	
-	@Autowired
+
 	private MessageRepository messageRepository;
 
-	@Autowired
 	private UserRepository userRepository;
 	
 	@Transactional
@@ -104,10 +102,12 @@ public class MessageService {
 		return messageRepository.countUnread(user);
 	}
 
+    @Autowired
 	public void setMessageRepository(MessageRepository messageRepository) {
 		this.messageRepository = messageRepository;
 	}
 
+    @Autowired
 	public void setUserRepository(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}

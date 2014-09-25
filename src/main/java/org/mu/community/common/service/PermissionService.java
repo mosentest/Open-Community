@@ -10,17 +10,13 @@ import org.springframework.stereotype.Service;
 @Service("permissionService")
 public class PermissionService {
 
-	@Autowired
 	private PermissionRepository permissionRepository;
 	
 	public List<Permission> getPermissions(long user) {
 		return permissionRepository.getPermissions(user);
 	}
 
-	public PermissionRepository getPermissionRepository() {
-		return permissionRepository;
-	}
-
+    @Autowired
 	public void setPermissionRepository(PermissionRepository permissionRepository) {
 		this.permissionRepository = permissionRepository;
 	}

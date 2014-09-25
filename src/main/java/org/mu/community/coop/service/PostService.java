@@ -23,13 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("postService")
 public class PostService {
 
-	@Autowired
 	private PostRepository postRepository;
 
-	@Autowired
 	private UserService userService;
 
-	@Autowired
 	private NotificationRepository notificationRepository;
 	
 	private String pattern = "@([a-zA-Z0-9]+)? ";
@@ -134,15 +131,18 @@ public class PostService {
 				post.getUser().getId(), user, comment.getContent(), comment.getPost(), comment.getId()));
 		return postRepository.getComment(comment.getId());
 	}
-	
+
+    @Autowired
 	public void setPostRepository(PostRepository postRepository) {
 		this.postRepository = postRepository;
 	}
 
+    @Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 
+    @Autowired
 	public void setNotificationRepository(NotificationRepository notificationRepository) {
 		this.notificationRepository = notificationRepository;
 	}

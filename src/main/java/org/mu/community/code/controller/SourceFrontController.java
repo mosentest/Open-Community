@@ -19,11 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class SourceFrontController {
 	
 	private static final int LIST_SIZE = 20;
-	
-	@Autowired
+
 	private JavaLibraryService javaLibraryService;
-	
-	@Autowired
+
 	private TagService tagService;
 	
 	@RequestMapping(value = {"", "/", "index.html"}, method = RequestMethod.GET)
@@ -56,10 +54,12 @@ public class SourceFrontController {
 		return null;
 	}
 
+    @Autowired
 	public void setJavaLibraryService(JavaLibraryService javaLibraryService) {
 		this.javaLibraryService = javaLibraryService;
 	}
 
+    @Autowired
 	public void setTagService(TagService tagService) {
 		this.tagService = tagService;
 	}

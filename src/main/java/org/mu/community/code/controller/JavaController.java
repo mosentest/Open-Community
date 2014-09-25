@@ -22,14 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class JavaController {
 	
 	private static final int LIST_SIZE = 20;
-	
-	@Autowired
+
 	private JavaLibraryService javaLibraryService;
-	
-	@Autowired
+
 	private TagService tagService;
 
-	@Autowired
 	private CategoryService categoryService;
 
 	@RequestMapping(value = "u/{path}/{project}.html", method = RequestMethod.GET) 
@@ -128,14 +125,17 @@ public class JavaController {
 		return null;
 	}
 
+    @Autowired
 	public void setJavaLibraryService(JavaLibraryService javaLibraryService) {
 		this.javaLibraryService = javaLibraryService;
 	}
 
+    @Autowired
 	public void setTagService(TagService tagService) {
 		this.tagService = tagService;
 	}
 
+    @Autowired
 	public void setCategoryService(CategoryService categoryService) {
 		this.categoryService = categoryService;
 	}

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("notificationService")
 public class NotificationService {
 
-	@Autowired
 	private NotificationRepository notificationRepository;
 	
 	@Transactional
@@ -53,6 +52,7 @@ public class NotificationService {
 		return notificationRepository.countUnread(user, nClass.getIdent(), nClass == NotificationClass.SYSTEM);
 	}
 
+    @Autowired
 	public void setNotificationRepository(NotificationRepository notificationRepository) {
 		this.notificationRepository = notificationRepository;
 	}

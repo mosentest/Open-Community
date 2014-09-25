@@ -1,5 +1,7 @@
 package org.mu.community.blog.controller;
 
+import org.mu.community.blog.service.BlogService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/")
 public class BlogController {
+
+    private BlogService blogService;
 
     @RequestMapping(value = { "blog/home.html", "blog/", "blog" }, method = RequestMethod.GET)
     public ModelAndView home(ModelMap model) {
@@ -35,4 +39,8 @@ public class BlogController {
         return new ModelAndView("blog/blog", model);
     }
 
+    @Autowired
+    public void setBlogService(BlogService blogService) {
+        this.blogService = blogService;
+    }
 }

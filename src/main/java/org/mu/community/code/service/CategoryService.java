@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Service("categoryService")
 public class CategoryService {
 
-	@Autowired
 	private CategoryRepository categoryRepository;
 
 	public List<Category> getMostTagged(String type) {
 		return categoryRepository.findByType(type);
 	}
 
+    @Autowired
 	public void setCategoryRepository(CategoryRepository categoryRepository) {
 		this.categoryRepository = categoryRepository;
 	}

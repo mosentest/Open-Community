@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("userService")
 public class UserService {
 
-	@Autowired
 	private UserRepository userRepository;
 
 	private MessageDigestPasswordEncoder passwordEncoder;
@@ -104,11 +103,8 @@ public class UserService {
 	public int countFans(long user) {
 		return userRepository.countFans(user);
 	}
-	
-	public UserRepository getUserRepository() {
-		return userRepository;
-	}
 
+    @Autowired
 	public void setUserRepository(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}

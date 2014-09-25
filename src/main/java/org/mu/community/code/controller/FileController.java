@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/file/")
 public class FileController {
 
-	@Autowired
 	private JavaLibraryService javaLibraryService;
 
-	@Autowired
 	private StatService statService;
 
 	@RequestMapping(value = "download.html", method = RequestMethod.GET)
@@ -55,10 +53,12 @@ public class FileController {
 		}
 	}
 
+    @Autowired
 	public void setJavaLibraryService(JavaLibraryService javaLibraryService) {
 		this.javaLibraryService = javaLibraryService;
 	}
 
+    @Autowired
 	public void setStatService(StatService statService) {
 		this.statService = statService;
 	}

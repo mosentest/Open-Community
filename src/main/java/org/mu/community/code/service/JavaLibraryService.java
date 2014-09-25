@@ -15,13 +15,10 @@ import org.springframework.stereotype.Service;
 @Service("javaLibraryService")
 public class JavaLibraryService {
 
-	@Autowired
 	private JavaLibraryRepository javaLibraryRepository;
-	
-	@Autowired
+
 	private JavaFileRepository javaFileRepository;
 
-	@Autowired
 	private JavaLibraryRDRepository javaLibraryRDRepository;
 	
 	public Page<JavaLibrary> search(String name, String project, String version,
@@ -102,14 +99,17 @@ public class JavaLibraryService {
 		return javaFileRepository.getJavaFile(library, file.substring(0, file.lastIndexOf('/')), name, extension);
 	}
 
+    @Autowired
 	public void setJavaLibraryRepository(JavaLibraryRepository javaLibraryRepository) {
 		this.javaLibraryRepository = javaLibraryRepository;
 	}
 
+    @Autowired
 	public void setJavaFileRepository(JavaFileRepository javaFileRepository) {
 		this.javaFileRepository = javaFileRepository;
 	}
 
+    @Autowired
 	public void setJavaLibraryRDRespository(JavaLibraryRDRepository javaLibraryRDRepository) {
 		this.javaLibraryRDRepository = javaLibraryRDRepository;
 	}

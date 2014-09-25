@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("projectService")
 public class ProjectService {
 
-	@Autowired
 	private ProjectRepository projectRepository;
 	
 	@Transactional
@@ -40,6 +39,7 @@ public class ProjectService {
 		return projectRepository.countUserProject(user, mode);
 	}
 
+    @Autowired
 	public void setProjectRepository(ProjectRepository projectRepository) {
 		this.projectRepository = projectRepository;
 	}

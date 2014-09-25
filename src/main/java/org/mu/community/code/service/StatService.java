@@ -21,11 +21,9 @@ public class StatService {
 	public static final String MONTHLY = "month";
 	
 	public static final String ANNUALLY = "year";
-	
-	@Autowired
+
 	private StatRepository statRepository;
 
-	@Autowired
 	private JavaLibraryRepository javaLibraryRepository;
 	
 	@Transactional
@@ -57,11 +55,13 @@ public class StatService {
 		value = statRepository.getValues(id, from, to);
 		return value;
 	}
-	
+
+    @Autowired
 	public void setStatRepository(StatRepository statRepository) {
 		this.statRepository = statRepository;
 	}
 
+    @Autowired
 	public void setJavaLibraryRepository(JavaLibraryRepository javaLibraryRepository) {
 		this.javaLibraryRepository = javaLibraryRepository;
 	}
