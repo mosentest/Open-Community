@@ -21,6 +21,17 @@
         VALUES (#{blog}, #{comment}, #{user.id}, #{create}, #{content})
     </insert>
 
+    <update id="updateBlog" parameterType="Blog">
+        UPDATE blog SET
+            category_id = #{category.id},
+            `top` = #{top},
+            update_date = #{update},
+            title = #{title},
+            summary = #{summary},
+            content = #{content}
+        WHERE id = #{id} AND user_id = #{user.id}
+    </update>
+
     <delete id="deleteCategory">
         DELETE FROM blog_category WHERE id = #{category} AND user_id = #{user}
     </delete>
