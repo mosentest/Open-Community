@@ -8,19 +8,19 @@
 	
 	<function>
 		<name>maskURL</name>
-		<function-class>org.mu.cloudservice.tag.Function</function-class>
+		<function-class>org.mu.community.common.tag.Function</function-class>
 		<function-signature>java.lang.String maskURL(java.lang.String)</function-signature>
 	</function>
 	
 	<function>
 		<name>sizeInfo</name>
-		<function-class>org.mu.cloudservice.tag.Function</function-class>
+		<function-class>org.mu.community.common.tag.Function</function-class>
 		<function-signature>java.lang.String sizeInfo(java.lang.Long)</function-signature>
 	</function>
 	
 	<function>
 		<name>profile</name>
-		<function-class>org.mu.cloudservice.tag.Function</function-class>
+		<function-class>org.mu.community.common.tag.Function</function-class>
 		<function-signature>java.lang.String profile(java.lang.String)</function-signature>
 	</function>
 	

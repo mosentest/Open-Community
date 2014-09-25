@@ -4,5 +4,5 @@
 <!DOCTYPE html>
 <html>
 <head></head>
-<body><c:redirect url="index.html"/></body>
+<body><c:redirect url="/source/index.html"/></body>
 </html>

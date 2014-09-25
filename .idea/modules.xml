@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CloudService.iml" filepath="$PROJECT_DIR$/CloudService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OpenCommunity.iml" filepath="$PROJECT_DIR$/OpenCommunity.iml" />
     </modules>
   </component>
 </project>

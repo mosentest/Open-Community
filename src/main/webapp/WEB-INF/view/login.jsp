@@ -15,7 +15,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 control-label" for="password">Password</label>
+              <label class="col-sm-3 control-label" for="project">Password</label>
               <div class="col-sm-7">
                 <input class="form-control" type="password" id="password" name="j_password">
               </div>

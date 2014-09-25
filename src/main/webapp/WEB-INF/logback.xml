@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
-	<contextName>cloudservice</contextName>
+	<contextName>source</contextName>
 
 	<property name="USER_HOME" value="${catalina.base}" />
 
@@ -12,10 +12,10 @@
 
 	<appender name="logfile"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${USER_HOME}/logs/cloudservice_log.txt</file>
+		<file>${USER_HOME}/logs/source_log.txt</file>
 		<encoding>UTF-8</encoding>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${USER_HOME}/logs/%d{yyyy-MM-dd}/cloudservice%i.zip
+			<fileNamePattern>${USER_HOME}/logs/%d{yyyy-MM-dd}/source%i.zip
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

@@ -2,7 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/WEB-INF/view/source/header.jsp">
-  <jsp:param name="nav" value="tag" />
+  <jsp:param name="nav" value="org.mu.community.common.tag" />
 </jsp:include>
 <div id="content">
   <div class="row">

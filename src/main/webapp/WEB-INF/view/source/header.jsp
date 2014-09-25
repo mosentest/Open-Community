@@ -42,7 +42,7 @@
       <ul class="nav navbar-nav">
         <li class="${param.nav eq 'home' ? 'active' : ''}"><a href="source/index.html">Home</a></li>
         <li class="${param.nav eq 'category' ? 'active' : ''}"><a href="source/categories.html">Categories</a></li>
-        <li class="${param.nav eq 'tag' ? 'active' : ''}"><a href="source/tags.html">Tags</a></li>
+        <li class="${param.nav eq 'org.mu.community.common.tag' ? 'active' : ''}"><a href="source/tags.html">Tags</a></li>
         <li class="${param.nav eq 'library' ? 'active' : ''}"><a href="source/libraries.html">Libraries</a></li>
         <li class="${param.nav eq 'code' ? 'active' : ''}"><a href="source/code.html">Source Files</a></li>
         <li class="${param.nav eq 'doc' ? 'active' : ''}"><a href="source/documentation.html">Documentation</a></li>

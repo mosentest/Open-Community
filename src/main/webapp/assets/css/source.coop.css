@@ -1,0 +1,277 @@
+/* Coop */
+.page-block {
+	padding: 5px 10px;
+}
+.current-page {
+	font-size: 16px;
+	color: #000000;
+}
+.page-link {
+	padding: 0px 3px;
+}
+.user-page {
+	width: 1000px;
+	margin: 0px auto;
+}
+.user-profile {
+	width: 320px;
+	background-color: #ffffff;
+	padding: 15px;
+	float: left;
+	margin-right: 3px;
+}
+.user-content {
+	margin-left: 3px;
+	width: 600px;
+	background-color: #ffffff;
+	float: left;
+	padding: 15px;
+	min-height: 800px;
+}
+.user-basic {
+	text-align: center;
+}
+.user-name {
+	font-size: 24px;
+	font-weight: 700;
+}
+.user-div {
+	padding: 10px 0px;
+}
+.user-action {
+	text-align: center;
+}
+.user-friend {
+	text-align: center;
+	font-size: 16px;
+}
+.user-info {
+	font-size: 16px;
+}
+.user-detail {
+}
+.notification-l {
+	padding: 10px 5px;
+}
+.notification-i {
+	border-bottom: 1px solid #cccccc;
+	padding: 8px 0px;
+}
+.notification-i-include {
+	background-color: #f5f5f5;
+	padding: 6px 10px;
+	font-style: italic;
+	margin: 6px 0px;
+}
+.write-post {
+	margin-bottom: 20px;
+}
+.write-post-profile { 
+	float: left; 
+	padding: 0px 5px; 
+	width: 16%;
+	text-align: center;
+}
+.write-post-content { 
+	float: left; 
+	width: 80%;
+	padding: 0px 3px;
+}
+.write-post-link { 
+	float: left; 
+	text-align: right; 
+	width: 98%; 
+}
+.post {
+	margin: 20px 0px;
+}
+.post-profile {
+	width: 16%;
+	float: left;
+	padding: 0px 5px;
+	text-align: center;
+}
+.post-body {
+	width: 80%;
+	background: #ffffff;
+	border: 1px solid #cccccc;
+	float: left;
+	border-radius: 3px;
+}
+.post-content {
+	padding: 8px;
+}
+.post-image {
+	max-width: 450px;
+	max-height: 300px;
+}
+.post-info {
+	padding: 3px 8px;
+	color: #666666;
+	font-size: 12px;
+}
+.post-like {
+	padding: 3px 8px;
+}
+.post-like img {
+	margin-right: 10px;
+}
+.post-comment-l {
+	background: #FDFCFA;
+	padding: 6px;
+}
+.post-comment-i {
+	margin: 0px 10px;
+	padding: 3px 0px;
+}
+.post-comment-profile {
+	float:left;
+}
+.post-comment-content {
+	float: left;
+	padding-left: 10px;
+}
+.post-comment-info {
+	color:#666666;
+	font-size: 12px;
+}
+.comment-form {
+	margin: -3px 0px;
+}
+.comment-form input {
+	width: 80%;
+}
+
+.project {
+	width: 130px;
+	height: 160px;
+	padding: 2px;
+	float: left;
+	text-align: center;
+}
+.project-image {
+	margin: 2px 5px 8px 5px;
+	border-radius: 3px;
+	width: 120px;
+	height: 120px;
+	display: block;
+}
+.project-name {
+	padding: 2px 5px 15px 5px;
+	font-size: 10px;
+	width: 100%;
+}
+.project:hover {
+	background: #e6e6e6;
+}
+.block {
+	padding: 5px;	
+}
+.block-header {
+	border-bottom: 1px solid #cccccc;
+	padding: 5px;
+}
+.block-content {
+	padding: 5px;
+}
+.user-header {
+	width: 100%;
+	text-align: center;
+	display: block;
+	font-size: 16px;
+}
+.write-message {
+	padding: 5px;
+	width: 900px;
+}
+.write-message-profile {
+	float: left;
+	padding: 10px 15px;
+} 
+.write-message-content {
+	float: left;
+	padding: 10px 15px;
+}
+.write-message-send {
+	float: left;
+	padding: 10px 5px;
+}
+.message-list {
+	padding: 5px 10px;
+	width: 900px;
+	border-top: 1px solid #eaeaea;
+}
+.message-i-l, .message-i-r {
+	vertical-align: middle;
+}
+.message-i-l .message-i-profile, .message-i-l .message-i-content {
+	float: left;
+}
+.message-i-r .message-i-profile, .message-i-r .message-i-content {
+	float: right;
+}
+.message-i-profile {
+	padding: 0px 5px;
+}
+.message-i-date {
+	text-align: center;
+	color: #3b73af;
+}
+.message-i-content {
+	border-radius: 5px;
+	border: 1px solid #eaeaea;
+	background: #EDF6F8;
+	padding: 5px;
+}
+.conv-i {
+	margin: 10px;
+	padding: 10px;
+	border-bottom: 1px solid #cccccc;
+}
+.conv-i:hover {
+	cursor: pointer;
+	background-color: #f5f5f5;
+}
+.conv-i-profile {
+	float: left;
+	height: 100%;
+}
+.conv-i-content {
+	float: left;
+	height: 100%;
+	width: 80%;
+	margin-left: 10px;
+}
+.conv-i-message {
+	color: #707070 !important;
+}
+.conv-i-info {
+	float: right;
+	color: #3b73af !important;
+}
+.conv-i-.account {
+	float: left;
+}
+.verified {
+	color: #14892c !important;
+}
+#response-message {
+	display: none;
+	width: 500px;
+	position: fixed;
+	left: 24px;
+	z-index: 1;
+}
+#login-panel {
+	width: 560px;
+	padding: 10px 20px;
+	margin: 30px auto;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+.embedded-panel {
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+}

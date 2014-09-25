@@ -1,0 +1,80 @@
+/* Source */
+
+table.info td.key {
+	color: black;
+}
+table.info td.value {
+	
+}
+.library-panel {
+	border: 1px solid #e5e5e5;
+	padding: 10px;
+	font-size: 13px;
+}
+ul.tree {
+	font-family: Verdana, sans-serif;
+	font-size: 11px;
+	line-height: 18px;
+	padding: 0px;
+	margin: 0px;
+}
+ul.tree li {
+	list-style: none;
+	padding: 0px;
+	padding-left: 20px;
+	margin: 0px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+ul.tree li.current {
+	font-size: 12px;
+	font-weight: bold;
+}
+ul.tree li.tree-directory {
+	cursor: pointer;
+}
+ul.tree li.tree-directory ul {
+	display: none;
+}
+li.css {
+	background:url(../img/file-icons/css.png) left top no-repeat;
+} 
+li.directory {
+	background:url(../img/file-icons/directory.png) left top no-repeat;
+}
+li.gif {
+	background:url(../img/file-icons/gif.png) left top no-repeat;
+} 
+li.htm {
+	background:url(../img/file-icons/htm.png) left top no-repeat;
+} 
+li.ico {
+	background:url(../img/file-icons/ico.png) left top no-repeat;
+} 
+li.jar {
+	background:url(../img/file-icons/jar.png) left top no-repeat;
+} 
+li.java {
+	background:url(../img/file-icons/java.png) left top no-repeat;
+} 
+li.jpg {
+	background:url(../img/file-icons/jpg.png) left top no-repeat;
+} 
+li.js {
+	background:url(../img/file-icons/js.png) left top no-repeat;
+} 
+li.ppt {
+	background:url(../img/file-icons/ppt.png) left top no-repeat;
+} 
+li.rar {
+	background:url(../img/file-icons/rar.png) left top no-repeat;
+} 
+li.txt {
+	background:url(../img/file-icons/txt.png) left top no-repeat;
+} 
+li.unknown {
+	background:url(../img/file-icons/unknown.png) left top no-repeat;
+} 
+li.xml {
+	background:url(../img/file-icons/xml.png) left top no-repeat;
+} 

@@ -10,6 +10,13 @@
 		http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/aop  
 		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+		
+	<bean id="mongoEntityManager" class="org.mu.jmdb.core.MongoEntityManager" init-method="init">
+		<property name="host" value="${mongoDB.url}"/>
+		<property name="port" value="${mongoDB.port}"/>
+		<property name="dbName" value="${mongoDB.db}"/>
+		<property name="packages" value="org.mu.community.code.entity"/>
+	</bean>
 	
 	<context:annotation-config />  
  	<context:component-scan base-package="org.mu">
@@ -17,7 +24,7 @@
 	</context:component-scan>
 	<aop:aspectj-autoproxy/>
 	
-	<bean id="applicationContextProvider" class="org.mu.cloudservice.utility.ApplicationContextProvider"/>
+	<bean id="applicationContextProvider" class="org.mu.community.common.util.ApplicationContextProvider"/>
 	
 	<import resource="MVCContext.xml"/>
 	<import resource="mysqlContext.xml" />

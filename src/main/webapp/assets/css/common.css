@@ -32,6 +32,63 @@ header {
 	display: inline;
 	padding: 0px 2px;
 }
+
+.pull-right {
+	text-align: right;
+}
+.number {
+	color: #3b73af;	
+}
+.info-text {
+	color: #666666;
+}
+.user-link img {
+	vertical-align: middle;
+}
+.user-link span {
+	padding-left: 6px;
+}
+.hidden-upload {
+	position: absolute;
+	top: -100px;
+}
+.profile-small {
+	width: 20px;
+	height: 20px;
+}
+.profile-medium {
+	width: 36px;
+	height: 36px;
+}
+.profile-default {
+	width: 48px;
+	height: 48px;
+}
+.profile-large {
+	max-width: 200px;
+	height: auto;
+}
+a.positive {
+	color: #3b73af;
+}
+a.negative {
+	color: #666666;
+}
+textarea.long-field {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width: 100%;
+}
+.long-field {
+	max-width: 500px;	
+}
+.border-top {
+	border-top: 1px solid #cccccc;
+	width: 100%;
+}
+.heavy {
+	font-weight: bold;
+}
 .separator {
 	height: 15px;
 }
@@ -42,6 +99,13 @@ header {
 	display: inline-block;
 	width: 15px;
 }
+.tab-long {
+	display: inline-block;
+	width: 30px;
+}
+.text-center {
+	text-align: center;
+}
 .hidden {
 	display: none;
 }
@@ -50,4 +114,221 @@ header {
 }
 .h-separator {
 	height: 20px;
+}
+.fl-left {
+	float: left;
+}
+.fl-right {
+	float: right;
+}
+table.centered tbody td {
+	vertical-align: middle !important;
+}
+.icon-link-text {
+	margin-left: 5px;
+}
+/*addUser.jsp*/
+.ajax-progressing {
+	display: none;
+}
+.ajax-result-content {
+	display: none;
+}
+.ajax-no-result {
+	display: none;
+}
+.center-title {
+	margin: 5px auto;
+	padding: 5px;
+	width: 1080px;
+}
+.center-block {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin: 10px auto;
+	padding: 20px;
+	width: 1080px;
+}
+
+/*libs.html显示内容使用的样式*/
+.sections {
+	background-color: #ffffff;
+	margin-top: 20px;
+	padding: 10px 20px;
+}
+
+.recommend-heading {
+	height: 30px;
+	line-height: 30px;
+	font-size: 20px;
+	font-weight: normal;
+	color: #f95844;
+	border-bottom: 1px solid #ddd;
+}
+
+.more {
+	font-size: 13px;
+	font-weight: normal;
+	color: #000;
+	float: right;
+	min-width: 45px;
+}
+
+ul.repo-list>li ul.repo-stats {
+	font-size: 13px;
+	font-weight: bold;
+	float: right;
+	margin: 3px 0 0 20px;
+}
+
+ul.repo-list>li ul.repo-stats li a {
+	display: inline-block;
+	padding: 1px 5px;
+	color: #838383;
+}
+
+.uploader {
+	font-size: 11px;
+	color: #999;
+}
+
+ul.repo-list>li h3 {
+	margin: 0;
+	width: 410px;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 30px;
+}
+
+ul.repo-list>li .description {
+	margin: 0;
+	font-size: 14px;
+	color: #615656;
+	width: 485px;
+}
+
+ul.repo-list>li {
+	position: relative;
+	margin: 0;
+	padding: 5px 0;
+	border-bottom: 1px solid #eeeeee;
+}
+
+ul li {
+	list-style-type: none;
+}
+
+li {
+	line-height: 18px;
+}
+
+/* admin/index.html 样式*/
+.dateGrid_operate {
+	border-bottom: 1px solid #ddd;
+	padding: 0px;
+}
+
+#dateGrid_tilte, #dateGrid {
+	border-top: #ddd solid 1px;
+	border-left: #ddd solid 1px;
+	width: 100%;
+	table-layout: fixed;
+}
+
+#dateGrid_tilte th {
+	background-color: #f5f5f5;
+	border-bottom: #ddd solid 1px;
+	border-right: #ddd solid 1px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+#dateGrid td {
+	overflow: hidden;
+	white-space: nowrap;
+	border-bottom: #ddd solid 1px;
+	border-right: #ddd solid 1px;
+}
+
+.dateGrid_div {
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+/*容纳表格内容的DIV,这个DIV上放置滚动条*/
+.content {
+	height: 300px; /*定一下高度,要不然就撑出来没滚动条了*/
+	overflow: scroll;
+}
+
+.dateGrid_page {
+	position: relative;
+	overflow: hidden;
+}
+
+.page {
+	height: 28px;
+	font-size: 9pt;
+	position: relative;
+	font-size: 9pt;
+}
+
+.separator {
+	display: inline-block;
+	zoom: 1;
+	border: 0;
+	border-left: solid 1px #cccccc;
+	margin: 1px;
+	margin-top: 0px;
+	height: 18px;
+	vertical-align: middle;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+
+.page-a {
+	text-decoration: none;
+	color: #333333;
+}
+
+.page-a:hover {
+	text-decoration: none;
+	background: #e6e6e6;
+	border: solid 1px #e6e6e6;
+}
+
+.page-num {
+	border: 1px solid #cccccc;
+	border-radius: 3.01px;
+	box-shadow: inset 0 1px 3px #cccccc;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-size: inherit;
+	margin: 0;
+	max-width: 250px;
+	vertical-align: baseline;
+	width: 100%;
+	margin: 0 2px;
+	width: 35px;
+	text-align: center;
+}
+
+.page-left {
+	padding-top: 3px;
+	padding-top: 2px\9;
+	_padding: 2px;
+	line-height: 25px;
+	height: 25px;
+	overflow: hidden;
+	padding-left: 2px;
+	float: left;
+	position: relative;
+	top: -1px;
+}
+
+.page-right {
+	float: right;
+	line-height: 28px;
+	padding-right: 5px;
 }

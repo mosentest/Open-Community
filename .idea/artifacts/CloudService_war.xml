@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="CloudService:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="cloudservice.war">
-      <element id="artifact" artifact-name="CloudService:war exploded" />
-    </root>
-  </artifact>
-</component>

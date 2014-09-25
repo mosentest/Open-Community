@@ -1,0 +1,417 @@
+============================================
+2014-09-19
+添加FULLTEXT索引
+============================================
+ALTER TABLE `opencomm`.`library_class` 
+ADD FULLTEXT INDEX `library_classes` (`classes` ASC);
+
+============================================
+2014-09-18
+将library的文件名储存在数据库中
+============================================
+CREATE TABLE `library_class` (
+  `id` varchar(24) NOT NULL,
+  `classes` text
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+============================================
+2014-09-17
+添加下载记录表
+============================================
+CREATE TABLE `opencomm`.`stat_download` (
+  `id` VARCHAR(24) NOT NULL,
+  `sum` BIGINT NULL,
+  `date` DATE NULL);
+
+============================================
+2014-09-12
+添加用户详细信息的关联表
+============================================
+CREATE TABLE `country` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `city` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `country_id` int(11) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  KEY `fk_city_country_idx` (`country_id`),
+  CONSTRAINT `fk_city_country` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `company` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `verified` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `user_detail` (
+  `user_id` bigint(20) NOT NULL,
+  `gender` bit(1) DEFAULT NULL,
+  `country_id` int(11) DEFAULT NULL,
+  `city_id` int(11) DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `org.mu.community.common.tag` varchar(255) DEFAULT NULL,
+  `role` varchar(45) DEFAULT NULL,
+  KEY `fk_user_detail_user_idx` (`user_id`),
+  CONSTRAINT `fk_user_detail_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+============================================
+2014-09-11
+修改提示表类型表示
+============================================
+ALTER TABLE `opencomm`.`notification` 
+CHANGE COLUMN `class_type` `class_type` CHAR(1) NULL DEFAULT NULL ,
+CHANGE COLUMN `type` `type` CHAR(3) NULL DEFAULT NULL ;
+
+ALTER TABLE `opencomm`.`notification_system` 
+CHANGE COLUMN `type` `type` CHAR(3) NULL DEFAULT NULL ;
+
+============================================
+2014-09-06
+添加提示表
+============================================
+CREATE TABLE `notification` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `read` bit(1) DEFAULT NULL,
+  `class_type` int(11) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `link_id_1` bigint(20) DEFAULT NULL,
+  `link_id_2` bigint(20) DEFAULT NULL,
+  `link_id_3` bigint(20) DEFAULT NULL,
+  `link_id_4` bigint(20) DEFAULT NULL,
+  `link_id_5` bigint(20) DEFAULT NULL,
+  `link_user` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_notif_user_idx` (`user_id`),
+  CONSTRAINT `fk_notif_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `notification_system` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `read` bit(1) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `link_id_1` bigint(20) DEFAULT NULL,
+  `link_id_2` bigint(20) DEFAULT NULL,
+  `link_id_3` bigint(20) DEFAULT NULL,
+  `link_id_4` bigint(20) DEFAULT NULL,
+  `link_id_5` bigint(20) DEFAULT NULL,
+  `link_user` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_notif_system_user_idx` (`user_id`),
+  CONSTRAINT `fk_notif_system_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+============================================
+2014-09-01
+添加用户状态表
+============================================
+CREATE TABLE `post` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `content` varchar(2000) DEFAULT NULL,
+  `n_like` int(11) DEFAULT NULL,
+  `n_comment` int(11) DEFAULT NULL,
+  `n_share` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_post_user` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `post_comment` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `post_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `content` varchar(2000) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_post_comment_post_idx` (`post_id`),
+  KEY `fk_post_comment_user_idx` (`user_id`),
+  CONSTRAINT `fk_post_comment_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_post_comment_post` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+
+USE `opencomm`;
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` TRIGGER `post_comment_AINS` AFTER INSERT ON `post_comment` FOR EACH ROW
+BEGIN
+	UPDATE post SET n_comment = n_comment + 1 WHERE id = NEW.post_id;
+END
+
+CREATE TABLE `post_like` (
+  `post_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`user_id`,`post_id`),
+  KEY `fk_post_like_post_idx` (`post_id`),
+  CONSTRAINT `fk_post_like_post` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_post_like_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+USE `opencomm`;
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` TRIGGER `post_like_AINS` AFTER INSERT ON `post_like` FOR EACH ROW
+BEGIN
+	UPDATE post SET n_like = n_like + 1 WHERE id = NEW.post_id;
+END
+
+USE `opencomm`;
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` TRIGGER `post_like_ADEL` AFTER DELETE ON `post_like` FOR EACH ROW
+BEGIN
+	UPDATE post SET n_like = n_like - 1 WHERE id = OLD.post_id;
+END
+============================================
+2014-09-01
+用户空间使用用户特殊的url显示
+============================================
+ALTER TABLE `opencomm`.`user` 
+CHANGE COLUMN `usercol` `path` VARCHAR(45) NULL DEFAULT NULL ,
+ADD UNIQUE INDEX `path_UNIQUE` (`path` ASC);
+--将所有用户的path设置为用户名
+update user set path = account where id <> 0;
+============================================
+2014-09-01
+添加项目表
+============================================
+CREATE TABLE `project` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `manager_id` bigint(20) DEFAULT NULL,
+  `create_date` DATETIME DEFAULT NULL,
+  `update_date` DATETIME DEFAULT NULL,
+  `mode` bit(1) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `description` varchar(2000) DEFAULT NULL,
+  `image_path` varchar(45) DEFAULT NULL,
+  `repository_url` varchar(255) DEFAULT NULL,
+  `n_fork` int(11) DEFAULT NULL,
+  `n_watching` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `repository_url_UNIQUE` (`repository_url`),
+  CONSTRAINT `fk_project_manager` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+============================================
+2014-08-30
+修改bug,日期类型误设为long
+添加会话的最新回复列以及相应的触发器
+============================================
+ALTER TABLE `opencomm`.`message_conversation` 
+ADD COLUMN `recent_message` BIGINT NULL AFTER `user_del`;
+CHANGE COLUMN `create_date` `create_date` DATETIME NULL DEFAULT NULL ,
+CHANGE COLUMN `update_date` `update_date` DATETIME NULL DEFAULT NULL ;
+
+USE `opencomm`;
+DELIMITER $$
+DROP TRIGGER IF EXISTS opencomm.message_AINS$$
+USE `opencomm`$$
+CREATE DEFINER=`root`@`localhost` TRIGGER `message_AINS` AFTER INSERT ON `message` FOR EACH ROW
+BEGIN
+	UPDATE message_conversation SET n_message = n_message + 1, recent_message = NEW.id, update_date = NEW.create_date WHERE id = NEW.conversation_id;
+END$$
+DELIMITER ;
+
+============================================
+2014-08-29
+添加salt,修改全部用户密码
+============================================
+update opencomm.user set password = 'f1764bc7363ece6170ebf1334f2e6e6f' where id <> 0
+============================================
+2014-08-27
+添加user表friends/fans数量属性,添加关系表触发器
+============================================
+ALTER TABLE `opencomm`.`user` 
+ADD COLUMN `n_friends` INT NULL AFTER `profile`,
+ADD COLUMN `n_fans` INT NULL AFTER `n_friends`;
+ALTER TABLE `opencomm`.`user_relation` 
+ADD PRIMARY KEY (`user_id`, `target_id`);
+
+USE `opencomm`;
+DELIMITER $$
+DROP TRIGGER IF EXISTS opencomm.user_relation_AINS$$
+USE `opencomm`$$
+CREATE TRIGGER `user_relation_AINS` AFTER INSERT ON `user_relation` FOR EACH ROW
+BEGIN
+	UPDATE user SET n_friends = n_friends + 1 WHERE id = NEW.user_id;
+	UPDATE user SET n_fans = n_fans + 1 WHERE id = NEW.target_id;
+END
+$$
+DELIMITER ;
+
+USE `opencomm`;
+DELIMITER $$
+DROP TRIGGER IF EXISTS opencomm.user_relation_BDEL$$
+USE `opencomm`$$
+CREATE TRIGGER `user_relation_BDEL` BEFORE DELETE ON `user_relation` FOR EACH ROW
+BEGIN
+	UPDATE user SET n_friends = n_friends - 1 WHERE id = OLD.user_id;
+	UPDATE user SET n_fans = n_fans - 1 WHERE id = OLD.target_id;
+END$$
+DELIMITER ;
+
+============================================
+2014-08-27
+修改message结构,添加会话机制
+============================================
+CREATE TABLE `message_conversation` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `target_id` bigint(20) DEFAULT NULL,
+  `create_date` bigint(20) DEFAULT NULL,
+  `update_date` bigint(20) DEFAULT NULL,
+  `read` bit(1) DEFAULT NULL,
+  `n_message` int(11) DEFAULT NULL,
+  `target_del` bit(1) DEFAULT NULL,
+  `user_del` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_message_conversation_user_id_idx` (`user_id`),
+  KEY `fk_message_conversation_target_idx` (`target_id`),
+  CONSTRAINT `fk_message_conversation_target` FOREIGN KEY (`target_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_message_conversation_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `message` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `conversation_id` bigint(20) DEFAULT NULL,
+  `message` varchar(2000) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `outward` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_message_conversation_idx` (`conversation_id`),
+  CONSTRAINT `fk_message_conversation` FOREIGN KEY (`conversation_id`) REFERENCES `message_conversation` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+============================================
+2014-08-26
+添加默认的admin用户,密码为123456
+============================================
+INSERT INTO `opencomm`.`user`(`email`,`account`,`password`,`verified`,`create_date`,`update_date`,`profile`)
+VALUES
+('admin@admin.com','admin','e10adc3949ba59abbe56e057f20f883e',true,'2014-01-01','2014-01-01','default.jpg');
+
+
+============================================
+2014-08-25
+为role表的id列添加自增,需要删除所有相关的外键,然后再添加自增属性,重新设置外键.
+============================================
+ALTER TABLE `opencomm`.`role_permission` 
+DROP FOREIGN KEY `fk_role_permission_role`;
+ALTER TABLE `opencomm`.`role_permission` 
+DROP INDEX `fk_role_permission_role_idx` ;
+
+ALTER TABLE `opencomm`.`user_role` 
+DROP FOREIGN KEY `fk_user_role_role`;
+
+ALTER TABLE `opencomm`.`role` 
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `opencomm`.`role_permission` 
+ADD INDEX `fk_role_permission_role_idx` (`role_id` ASC);
+ALTER TABLE `opencomm`.`role_permission` 
+ADD CONSTRAINT `fk_role_permission_role`
+  FOREIGN KEY (`role_id`)
+  REFERENCES `opencomm`.`role` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `opencomm`.`user_role` 
+ADD CONSTRAINT `fk_user_role_role`
+  FOREIGN KEY (`role_id`)
+  REFERENCES `opencomm`.`role` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+
+============================================
+2014-08-25
+修改user表的日期列名,避免关键字冲突
+添加user_relation用户关系表
+============================================
+ALTER TABLE `opencomm`.`user` 
+CHANGE COLUMN `create` `create_date` DATETIME NULL DEFAULT NULL ,
+CHANGE COLUMN `update` `update_date` DATETIME NULL DEFAULT NULL ;
+
+CREATE TABLE `user_relation` (
+  `user_id` bigint(20) NOT NULL,
+  `target_id` bigint(20) NOT NULL,
+  KEY `fk_user_relation_user_idx` (`user_id`),
+  KEY `fk_user_relation_target_idx` (`target_id`),
+  CONSTRAINT `fk_user_relation_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_relation_target` FOREIGN KEY (`target_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+============================================
+2014-08-23
+初步设置用户,用户权限表
+============================================
+
+
+CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `email` varchar(45) DEFAULT NULL,
+  `account` varchar(45) DEFAULT NULL,
+  `password` varchar(45) NOT NULL,
+  `verified` bit(1) DEFAULT NULL,
+  `create` datetime DEFAULT NULL,
+  `update` datetime DEFAULT NULL,
+  `profile` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `account_UNIQUE` (`account`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `role` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `permission` varchar(45) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permission_UNIQUE` (`permission`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `role_permission` (
+  `role_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  KEY `fk_role_permission_role_idx` (`role_id`),
+  KEY `fk_role_permission_permission_idx` (`permission_id`),
+  CONSTRAINT `fk_role_permission_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_role_permission_permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `user_role` (
+  `user_id` bigint(20) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  KEY `fk_user_role_user_idx` (`user_id`),
+  KEY `fk_user_role_role_idx` (`role_id`),
+  CONSTRAINT `fk_user_role_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_role_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

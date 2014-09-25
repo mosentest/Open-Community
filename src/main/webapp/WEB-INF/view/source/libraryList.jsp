@@ -8,7 +8,7 @@
 <div id="content">
   <div class="row">
     <c:set var="url">
-      source/libraries.html?<c:if test="${not empty name}">name=${name}&</c:if><c:if test="${not empty project}">project=${project}&</c:if><c:if test="${not empty version}">version=${version}&</c:if><c:if test="${not empty category}">category=${category}&</c:if><c:if test="${not empty tag}">tag=${tag}&</c:if><c:if test="${verified}">verified=${verified}</c:if>
+      source/libraries.html?<c:if test="${not empty name}">name=${name}&</c:if><c:if test="${not empty project}">project=${project}&</c:if><c:if test="${not empty version}">version=${version}&</c:if><c:if test="${not empty category}">category=${category}&</c:if><c:if test="${not empty tag}">org.mu.community.common.tag=${tag}&</c:if><c:if test="${verified}">verified=${verified}</c:if>
     </c:set>
     <c:if test="${libraryList.totalElement gt 0}">
       <div class="col-lg-4 pull-right"></div>

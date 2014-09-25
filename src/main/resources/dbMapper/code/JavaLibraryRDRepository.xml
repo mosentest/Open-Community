@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.community.code.repository.JavaLibraryRDRepository" >
+	
+	<insert id="associateClass">
+		INSERT INTO library_class (id, classes) VALUES (#{id}, #{classes})
+	</insert>
+	
+	<select id="searchLibrary" resultType="string">
+		SELECT id FROM library_class WHERE MATCH (classes) AGAINST (#{name}) LIMIT #{offset}, #{size};
+	</select>
+	
+	<select id="countLibrary" resultType="long">
+		SELECT COUNT(*) FROM library_class WHERE MATCH (classes) AGAINST (#{name});
+	</select>
+
+</mapper>

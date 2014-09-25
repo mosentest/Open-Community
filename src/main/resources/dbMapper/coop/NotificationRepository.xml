@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mu.community.coop.repository.NotificationRepository">
+
+	<sql id="notification">
+		SELECT * FROM(
+			(SELECT
+				notification.id AS id,
+				FALSE AS system,
+				notification.read AS `read`,
+				notification.create_date AS create_date,
+				notification.content AS content,
+				notification.type AS `type`,
+				notification.class_type AS class_type,
+				notification.link_id_1 AS link_id_1,
+				notification.link_id_2 AS link_id_2,
+				notification.link_id_3 AS link_id_3,
+				notification.link_id_4 AS link_id_4,
+				notification.link_id_5 AS link_id_5,
+				user.id AS user_id,
+				user.account AS user_account,
+				user.path AS user_path,
+				user.profile AS user_profile,
+				link_user.id AS link_user_id,
+				link_user.account AS link_user_account,
+				link_user.path AS link_user_path,
+				link_user.profile AS link_user_profile
+			FROM
+				notification
+			INNER JOIN user ON user.id = notification.user_id
+			LEFT JOIN user AS link_user ON link_user.id = notification.link_user
+			)
+			UNION 
+			(
+			SELECT
+				notification_system.id AS id,
+				TRUE AS system,
+				notification_system.read AS `read`,
+				notification_system.create_date AS create_date,
+				notification_system.content AS content,
+				notification_system.type AS `type`,
+				0 AS class_type,
+				notification_system.link_id_1 AS link_id_1,
+				notification_system.link_id_2 AS link_id_2,
+				notification_system.link_id_3 AS link_id_3,
+				notification_system.link_id_4 AS link_id_4,
+				notification_system.link_id_5 AS link_id_5,
+				user.id AS user_id,
+				user.account AS user_account,
+				user.path AS user_path,
+				user.profile AS user_profile,
+				link_user.id AS link_user_id,
+				link_user.account AS link_user_account,
+				link_user.path AS link_user_path,
+				link_user.profile AS link_user_profile
+			FROM
+				notification_system
+			INNER JOIN user ON user.id = notification_system.user_id
+			LEFT JOIN user AS link_user ON link_user.id = notification_system.link_user
+			)
+		) AS notification
+	</sql>
+	
+	<resultMap id="notificationMap" type="Notification">
+		<id column="id" property="id"/>
+		<result property="read" column="read"/>
+		<result property="system" column="system"/>
+		<result property="content" column="content"/>
+		<result property="linkId1" column="link_id_1"/>
+		<result property="linkId2" column="link_id_2"/>
+		<result property="linkId3" column="link_id_3"/>
+		<result property="linkId4" column="link_id_4"/>
+		<result property="linkId5" column="link_id_5"/>
+		<result property="type" column="type" typeHandler="org.mu.community.common.enumtype.NTTypeHandler"/>
+		<result property="classType" column="class_type" typeHandler="org.mu.community.common.enumtype.NCTypeHandler"/>
+		<association property="user" javaType="User">
+			<id property="id" column="user_id"/>
+			<result property="path" column="user_path"/>
+			<result property="account" column="user_account"/>
+			<result property="profile" column="user_profile"/>
+		</association>
+		<association property="linkUser" javaType="User">
+			<id property="id" column="link_user_id"/>
+			<result property="path" column="link_user_path"/>
+			<result property="account" column="link_user_account"/>
+			<result property="profile" column="link_user_profile"/>
+		</association>
+	</resultMap>
+	
+	<select id="getAll" resultMap="notificationMap">
+		<include refid="notification"/>
+		WHERE notification.user_id = #{user}
+		ORDER BY create_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="getNotifications" resultMap="notificationMap">
+		SELECT
+			notification.id AS id,
+			notification.read AS `read`,
+			notification.content AS content,
+			<if test="system">TRUE AS system,</if>
+			notification.type AS `type`,
+			<if test="!system">
+			notification.class_type AS class_type,
+			</if>
+			notification.link_id_1 AS link_id_1,
+			notification.link_id_2 AS link_id_2,
+			notification.link_id_3 AS link_id_3,
+			notification.link_id_4 AS link_id_4,
+			notification.link_id_5 AS link_id_5,
+			user.id AS user_id,
+			user.account AS user_account,
+			user.path AS user_path,
+			user.profile AS user_profile,
+			link_user.id AS link_user_id,
+			link_user.account AS link_user_account,
+			link_user.path AS link_user_path,
+			link_user.profile AS link_user_profile
+		FROM
+			<if test="system">notification_system</if>
+			<if test="!system">notification</if>
+			AS notification
+		INNER JOIN user ON user.id = notification.user_id
+		LEFT JOIN user AS link_user ON link_user.id = notification.link_user
+		WHERE notification.user_id = #{user} 
+		<if test="!system">AND class_type = #{classType}</if>
+		ORDER BY notification.create_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="getUnread" resultMap="notificationMap">
+		<include refid="notification"/>
+		WHERE notification.user_id = #{user} AND `read` = FALSE
+		ORDER BY notification.create_date DESC
+		LIMIT #{offset}, #{size}
+	</select>
+	
+	<select id="countAllUnread" resultType="int">
+		SELECT COUNT(notification.id) + 
+			(SELECT COUNT(notification_system.id) FROM notification_system 
+				WHERE user_id = #{user} AND `read` = FALSE)
+		FROM notification
+		WHERE notification.user_id = #{user} AND `read` = FALSE
+	</select>
+	
+	<select id="countUnread" resultType="int">
+		SELECT COUNT(notification.id)
+		FROM
+		<if test="system">notification_system</if>
+		<if test="!system">notification</if>
+		AS notification
+		WHERE notification.user_id = #{user} AND `read` = FALSE
+		<if test="!system">AND class_type = #{classType}</if>
+	</select>
+	
+	<update id="read">
+		UPDATE 
+		<if test="system">notification_system</if>
+		<if test="!system">notification</if> 
+		SET `read` = TRUE where id = #{notification}
+	</update>
+	
+	<insert id="create" parameterType="notification">
+		INSERT INTO 
+		<if test="system">notification_system</if>
+		<if test="!system">notification</if>
+		(user_id, create_date, `read`, `type`, content, <if test="!system">class_type</if>
+		, link_user, link_id_1, link_id_2, link_id_3, link_id_4, link_id_5)
+		VALUES
+		(#{user.id}, #{create}, FALSE, #{type, typeHandler=org.mu.community.common.enumtype.NTTypeHandler}, #{content}
+		<if test="!system">, #{classType, typeHandler=org.mu.community.common.enumtype.NCTypeHandler}</if>,
+		#{linkUser.id}, #{linkId1}, #{linkId2}, #{linkId3}, #{linkId4}, #{linkId5});
+	</insert>
+	
+</mapper>

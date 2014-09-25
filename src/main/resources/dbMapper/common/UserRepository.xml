@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.mu.opencomm.common.org.mu.cloudservice.repository.UserRepository" >
+<mapper namespace="org.mu.community.common.repository.UserRepository" >
 
 	<sql id="minimal">
 		SELECT 
@@ -34,7 +34,7 @@
 			company.verified AS company_verified,
 			country.name AS country,
 			city.name AS city,
-			user_detail.tag AS tag
+			user_detail.org.mu.community.tag AS org.mu.community.tag
 		FROM 
 			user
 	</sql>
@@ -72,7 +72,7 @@
 			<result property="company_verified" column="companyVerified"/>
 			<result property="country" column="country"/>
 			<result property="city" column="city"/>
-			<result property="tag" column="tag"/>
+			<result property="org.mu.community.common.tag" column="org.mu.community.common.tag"/>
 		</association>
 	</resultMap>
 	

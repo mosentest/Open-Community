@@ -9,7 +9,7 @@
 	<uri>http://www.source.com/lib</uri>
 	<tag>
 		<name>date</name>
-		<tag-class>org.mu.cloudservice.tag.DateTag</tag-class>
+		<tag-class>org.mu.community.common.tag.DateTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>date</name>
@@ -25,14 +25,25 @@
 		</attribute>
 	</tag>
 	<tag>
+		<name>post</name>
+		<tag-class>org.mu.community.common.tag.PostTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>post</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>org.mu.community.coop.entity.Post</type>
+		</attribute>
+	</tag>
+	<tag>
 		<name>page</name>
-		<tag-class>org.mu.cloudservice.tag.PageTag</tag-class>
+		<tag-class>org.mu.community.common.tag.PageTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>page</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>org.mu.cloudservice.utility.Page</type>
+			<type>org.mu.community.common.dbutil.Page</type>
 		</attribute>
 		<attribute>
 			<name>url</name>
@@ -42,8 +53,30 @@
 		</attribute>
 	</tag>
 	<tag>
+		<name>notification</name>
+		<tag-class>org.mu.community.common.tag.NotificationTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>notification</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>org.mu.community.coop.entity.Notification</type>
+		</attribute>
+	</tag>
+	<tag>
+		<name>javaLib</name>
+		<tag-class>org.mu.community.common.tag.JavaLibraryStructureTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>javaLibrary</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>org.mu.community.code.entity.JavaLibrary</type>
+		</attribute>
+	</tag>
+	<tag>
 		<name>breadCrumb</name>
-		<tag-class>org.mu.cloudservice.tag.BreadCrumbTag</tag-class>
+		<tag-class>org.mu.community.common.tag.BreadCrumbTag</tag-class>
 		<body-content>scriptless</body-content>
 		<attribute>
 			<name>path</name>
@@ -62,6 +95,41 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+	<tag>
+		<name>structure</name>
+		<tag-class>org.mu.community.common.tag.StructureTreeTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>library</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>org.mu.community.code.entity.JavaLibrary</type>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>ext</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<name>expand</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Boolean</type>
+		</attribute>
+		<attribute>
+			<name>roots</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.util.List</type>
 		</attribute>
 	</tag>
 </taglib>  
