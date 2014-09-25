@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.mu.community.blog.repository.BlogRepository" >
 
-    <select id="blog">
+    <sql id="blog">
       SELECT
         blog.id,
         blog.`top`,
+        blog.`type`,
         blog.create_date,
         blog.update_date,
         blog.title,
@@ -24,12 +25,13 @@
       FROM blog
       JOIN user ON user.id = blog.user_id
       JOIN blog_category ON blog_category.id = blog.category_id
-    </select>
+    </sql>
 
-    <select id="minimalBlog">
+    <sql id="minimalBlog">
       SELECT
         blog.id,
         blog.`top`,
+        blog.`type`,
         blog.create_date,
         blog.title,
         blog.summary,
@@ -43,9 +45,9 @@
       FROM blog
       JOIN user ON user.id = blog.user_id
       JOIN blog_category ON blog_category.id = blog.category_id
-    </select>
+    </sql>
 
-    <select id="comment">
+    <sql id="comment">
       SELECT
         blog_comment.id,
         blog_comment.blog_id,
@@ -60,17 +62,17 @@
 	    (SELECT COUNT(*) > 0 FROM blog_comment_like where blog_comment_like.comment_id = blog_comment.id and blog_comment_like.user_id = #{auth}) AS liked
       FROM blog_comment
       JOIN user ON user.id = blog.user_id
-    </select>
+    </sql>
 
-    <select id="category">
+    <sql id="category">
       SELECT
         id,
         name,
         n_blog
       FROM blog_category
-    </select>
+    </sql>
 
-    <select id="reply">
+    <sql id="reply">
       SELECT
         blog_reply.id,
         blog_reply.blog_id,
@@ -83,7 +85,14 @@
         user.profile AS user_profile
       FROM blog_reply
       JOIN user ON user.id = blog_reply.user_id
-    </select>
+    </sql>
+
+    <sql id="monthData">
+        SELECT
+          `date` AS `month`,
+          n_blog
+        FROM blog_month
+    </sql>
 
     <resultMap id="blogMap" type="Blog">
         <id property="id" column="id" />
@@ -91,6 +100,7 @@
         <result property="update" column="update_date"/>
         <result property="top" column="top"/>
         <result property="title" column="title"/>
+        <result property="type" column="type" typeHandler="org.mu.community.common.dbutil.BlogTypeHandler"/>
         <result property="summary" column="summary"/>
         <result property="content" column="content"/>
         <result property="nLike" column="n_like"/>
@@ -142,6 +152,11 @@
         </association>
     </resultMap>
 
+    <resultMap id="monthDataMap" type="BlogMonthData">
+        <result property="month" column="month"/>
+        <result property="nBlog" column="n_blog"/>
+    </resultMap>
+
     <select id="getCategories" resultMap="categoryMap">
         <include refid="category"/>
         WHERE blog_category.user_id = #{user}
@@ -188,6 +203,13 @@
         <include refid="reply"/>
         WHERE blog_reply.comment_id = #{comment}
         ORDER BY blog_reply.create_date
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getMonthData" resultMap="monthDataMap">
+        <include refid="monthData"/>
+        WHERE user_id = #{user}
+        ORDER BY `date` DESC
         LIMIT #{offset}, #{size}
     </select>
 

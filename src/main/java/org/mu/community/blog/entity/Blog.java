@@ -14,6 +14,8 @@ public class Blog {
 
     private User user;
 
+    private BlogType type;
+
     private BlogCategory category;
 
     private boolean top;
@@ -158,5 +160,13 @@ public class Blog {
 
     public void setLiked(boolean liked) {
         this.liked = liked;
+    }
+
+    public BlogType getType() {
+        return type;
+    }
+
+    public void setType(BlogType type) {
+        this.type = type;
     }
 }

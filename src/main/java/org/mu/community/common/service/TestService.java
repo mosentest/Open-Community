@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Random;
 
 import org.bson.types.ObjectId;
+import org.mu.community.blog.entity.Blog;
+import org.mu.community.blog.entity.BlogCategory;
+import org.mu.community.blog.entity.BlogType;
+import org.mu.community.blog.repository.BlogModifyRepository;
+import org.mu.community.blog.repository.BlogRepository;
 import org.mu.community.code.entity.Category;
 import org.mu.community.code.entity.FileInfo;
 import org.mu.community.code.entity.JavaFile;
@@ -18,6 +23,7 @@ import org.mu.community.code.repository.JavaLibraryRDRepository;
 import org.mu.community.code.repository.JavaLibraryRepository;
 import org.mu.community.code.repository.StatRepository;
 import org.mu.community.code.repository.TagRepository;
+import org.mu.community.common.entity.User;
 import org.mu.community.common.util.DateUtil;
 import org.mu.community.common.util.FileUtil;
 import org.mu.community.common.util.LibraryAnalyzer;
@@ -25,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.BasicDBObject;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("testService")
 public class TestService {
@@ -46,6 +53,59 @@ public class TestService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+
+    @Autowired
+    private BlogRepository blogRepository;
+
+    @Autowired
+    private BlogModifyRepository blogModifyRepository;
+
+    @Transactional
+    public void newBlogCategories() {
+        BlogCategory c1 = new BlogCategory();
+        c1.setName("Java");
+        c1.setUser(1l);
+        BlogCategory c2 = new BlogCategory();
+        c2.setName("C++");
+        c2.setUser(1l);
+        BlogCategory c3 = new BlogCategory();
+        c3.setName("Redis");
+        c3.setUser(1l);
+        BlogCategory c4 = new BlogCategory();
+        c4.setName("Data structure");
+        c4.setUser(1l);
+        BlogCategory c5 = new BlogCategory();
+        c5.setName("Functional Programming");
+        c5.setUser(1l);
+        BlogCategory c6 = new BlogCategory();
+        c6.setName("Erlang");
+        c6.setUser(1l);
+
+        blogModifyRepository.createCategory(c1);
+        blogModifyRepository.createCategory(c2);
+        blogModifyRepository.createCategory(c3);
+        blogModifyRepository.createCategory(c4);
+        blogModifyRepository.createCategory(c5);
+        blogModifyRepository.createCategory(c6);
+    }
+
+    @Transactional
+    public void newBlogs() {
+        User user = new User(1l);
+        List<BlogCategory> categories = blogRepository.getCategories(user.getId());
+        Random random = new Random();
+        for (int i = 0; i < 30; i++) {
+            Blog blog = new Blog();
+            blog.setCreate(DateUtil.getRandomDateInRange("2013-10-01", "2014-09-25"));
+            blog.setUser(user);
+            blog.setType(BlogType.values()[random.nextInt(BlogType.values().length)]);
+            blog.setCategory(categories.get(random.nextInt(categories.size())));
+            blog.setSummary("Summary for blog number: " + i);
+            blog.setTitle("Title for blog number: " + i);
+            blog.setContent("Content for blog number: " + i);
+            blogModifyRepository.createBlog(blog);
+        }
+    }
 	
 	public void loadJar() {
 		List<Category> categories = categoryRepository.findByType("java");
@@ -182,4 +242,44 @@ public class TestService {
 	public void setCategoryRepository(CategoryRepository categoryRepository) {
 		this.categoryRepository = categoryRepository;
 	}
+
+    public StatRepository getStatRepository() {
+        return statRepository;
+    }
+
+    public JavaLibraryRepository getJavaLibraryRepository() {
+        return javaLibraryRepository;
+    }
+
+    public JavaLibraryRDRepository getJavaLibraryRDRepository() {
+        return javaLibraryRDRepository;
+    }
+
+    public JavaFileRepository getJavaFileRepository() {
+        return javaFileRepository;
+    }
+
+    public TagRepository getTagRepository() {
+        return tagRepository;
+    }
+
+    public CategoryRepository getCategoryRepository() {
+        return categoryRepository;
+    }
+
+    public BlogRepository getBlogRepository() {
+        return blogRepository;
+    }
+
+    public void setBlogRepository(BlogRepository blogRepository) {
+        this.blogRepository = blogRepository;
+    }
+
+    public BlogModifyRepository getBlogModifyRepository() {
+        return blogModifyRepository;
+    }
+
+    public void setBlogModifyRepository(BlogModifyRepository blogModifyRepository) {
+        this.blogModifyRepository = blogModifyRepository;
+    }
 }

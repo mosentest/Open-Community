@@ -122,11 +122,20 @@ public class DateUtil {
 		try {
 			Date d1 = dateFormat.parse(start);
 			Date d2 = dateFormat.parse(end);
-			return new Date(d1.getTime() + random.nextInt((int) (d2.getTime() - d1.getTime())));
+			return new Date(d1.getTime() + nextLong(d2.getTime() - d1.getTime()));
 		} catch (Exception e) {
 			return null;
 		}
 	}
+
+    private static long nextLong(long n) {
+        long bits, val;
+        do {
+            bits = (random.nextLong() << 1) >>> 1;
+            val = bits % n;
+        } while (bits - val + (n - 1) < 0L);
+        return val;
+    }
 	
 	public static Date addRandomDate(Date date, int seconds) {
 		return new Date(date.getTime() + random.nextInt(seconds * 1000));
@@ -137,6 +146,13 @@ public class DateUtil {
 		calendar.setTime(date);
 		return calendar;
 	}
+
+    public static Date getDate(int year, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.DAY_OF_YEAR, day);
+        return calendar.getTime();
+    }
 	
 	public static Date getDate(String dateString, String format) {
 		Date date = null;

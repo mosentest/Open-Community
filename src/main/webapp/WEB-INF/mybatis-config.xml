@@ -4,7 +4,7 @@
 	<typeHandlers>
 		<typeHandler handler="org.mu.community.common.enumtype.NCTypeHandler"
 			jdbcType="CHAR" javaType="org.mu.community.common.enumtype.NotificationClass" />
-		<typeHandler handler="org.mu.community.common.enumtype.NTTypeHandler"
-			jdbcType="CHAR" javaType="org.mu.community.common.enumtype.NotificationType" />
+        <typeHandler handler="org.mu.community.common.enumtype.NTTypeHandler"
+                     jdbcType="CHAR" javaType="org.mu.community.common.enumtype.NotificationType" />
 	</typeHandlers>
 </configuration>

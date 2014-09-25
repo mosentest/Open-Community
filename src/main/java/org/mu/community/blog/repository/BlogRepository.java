@@ -1,10 +1,7 @@
 package org.mu.community.blog.repository;
 
 import org.apache.ibatis.annotations.Param;
-import org.mu.community.blog.entity.Blog;
-import org.mu.community.blog.entity.BlogCategory;
-import org.mu.community.blog.entity.BlogComment;
-import org.mu.community.blog.entity.BlogReply;
+import org.mu.community.blog.entity.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -34,5 +31,7 @@ public interface BlogRepository {
                                              @Param("offset") int offset, @Param("size") int size);
 
     public List<BlogReply> getCommentReplies(@Param("comment") long comment, @Param("offset") int offset, @Param("size") int size);
+
+    public List<BlogMonthData> getMonthData(@Param("user") long user, @Param("offset") int offset, @Param("size") int size);
 
 }

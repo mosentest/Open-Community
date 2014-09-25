@@ -16,7 +16,8 @@ public class TestController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView home() throws Exception {
-		return new ModelAndView("coop/userproject");
+        testService.newBlogs();
+        return new ModelAndView("coop/userproject");
 	}
 
 	public TestService getTestService() {

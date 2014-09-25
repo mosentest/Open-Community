@@ -3,20 +3,20 @@
 <mapper namespace="org.mu.community.blog.repository.BlogModifyRepository" >
 
     <insert id="createBlog" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog (user_id, category_id, `top`, create_date, updat_date, title, summary, content, n_like, n_view, n_reply)
-        VALUES (#{user.id}, #{category.id}, #{top}, #{create}, #{update}, #{title}, #{summary}, #{content}, 0, 0, 0)
+        INSERT INTO blog (user_id, category_id, `top`, `type`, create_date, update_date, title, summary, content, n_like, n_view, n_reply)
+        VALUES (#{user.id}, #{category.id}, #{top}, #{type,typeHandler=org.mu.community.common.dbutil.BlogTypeHandler}, #{create}, #{update}, #{title}, #{summary}, #{content}, 0, 0, 0)
     </insert>
 
-    <insert id="createCategory" parameterType="BlogCategory" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createCategory" parameterType="BlogCategory">
         INSERT INTO blog_category (user_id, name, n_blog) VALUES (#{user}, #{name}, 0)
     </insert>
 
-    <insert id="createComment" parameterType="BlogComment" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createComment" parameterType="BlogComment">
         INSERT INTO blog_comment (blog_id, user_id, create_date, content, n_like, n_reply)
         VALUES (#{blog}, #{user.id}, #{create}, #{content}, 0, 0)
     </insert>
 
-    <insert id="createReply" parameterType="BlogReply" useGeneratedKeys="true" keyProperty="id">
+    <insert id="createReply" parameterType="BlogReply">
         INSERT INTO blog_reply (blog_id, comment_id, user_id, create_date, content)
         VALUES (#{blog}, #{comment}, #{user.id}, #{create}, #{content})
     </insert>

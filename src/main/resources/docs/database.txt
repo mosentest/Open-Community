@@ -1,5 +1,25 @@
 ============================================
 2014-09-25
+添加博客数统计表
+============================================
+CREATE TABLE `blog_month` (
+  `user_id` bigint(20) NOT NULL,
+  `date` date NOT NULL DEFAULT '1970-01-01',
+  `n_blog` int(11) DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`date`),
+  KEY `fk_blog_month_user_idx` (`user_id`),
+  CONSTRAINT `fk_blog_month_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `blog_type` (
+  `user_id` bigint(20) NOT NULL,
+  `type` char(1) DEFAULT NULL,
+  `n_blog` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+NGINE=InnoDB DEFAULT CHARSET=utf8;
+
+============================================
+2014-09-25
 添加博客数据表的触发器
 ============================================
 USE `opencomm`;
@@ -9,6 +29,7 @@ BEGIN
 	UPDATE blog SET n_reply = n_reply - 1 WHERE id = OLD.blog_id;
 	UPDATE blog_comment SET n_reply = n_reply - 1 WHERE blog_id = OLD.comment_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_reply_AINS` AFTER INSERT ON `blog_reply` FOR EACH ROW
@@ -16,50 +37,85 @@ BEGIN
 	UPDATE blog SET n_reply = n_reply + 1 WHERE id = NEW.blog_id;
 	UPDATE blog_comment SET n_reply = n_reply + 1 WHERE blog_id = NEW.comment_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_like_ADEL` AFTER DELETE ON `blog_like` FOR EACH ROW
 BEGIN
 	UPDATE blog SET n_like = n_like - 1 WHERE id = OLD.blog_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_like_AINS` AFTER INSERT ON `blog_like` FOR EACH ROW
 BEGIN
 	UPDATE blog SET n_like = n_like + 1 WHERE id = NEW.blog_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_comment_ADEL` AFTER DELETE ON `blog_comment` FOR EACH ROW
 BEGIN
 	UPDATE blog SET n_reply = n_reply - 1 WHERE id = OLD.blog_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_comment_AINS` AFTER INSERT ON `blog_comment` FOR EACH ROW
 BEGIN
 	UPDATE blog SET n_reply = n_reply + 1 WHERE id = NEW.blog_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_ADEL` AFTER DELETE ON `blog` FOR EACH ROW
 BEGIN
+	DECLARE date_month DATE;
+	DECLARE nBlog INT;
+
 	UPDATE blog_category SET n_blog = n_blog - 1 WHERE id = OLD.category_id;
-	UPDATE user SET n_blog = n_blog - 1 WHERE id = OLD.user_id;
+	UPDATE blog_stat SET n_blog = n_blog - 1 WHERE user_id = OLD.user_id;
+
+	SET @date_month = STR_TO_DATE(CONCAT(YEAR(OLD.create_date), '-', MONTH(OLD.create_date), '-01'), '%Y-%m-%d');
+	SELECT COALESCE(SUM(n_blog), 0) FROM blog_month WHERE user_id = OLD.user_id AND `date` = @date_month INTO @nBlog;
+	IF @nBlog = 1 THEN
+		DELETE FROM blog_month WHERE `date` = @date_month AND user_id = OLD.user_id;
+	ELSE
+		UPDATE blog_month SET n_blog = n_blog - 1 WHERE `date` = @date_month AND user_id = OLD.user_id;
+	END IF;
+
+	UPDATE blog_type SET n_blog = n_blog - 1 WHERE `type` = OLD.`type` AND user_id = OLD.user_id;
+
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_AINS` AFTER INSERT ON `blog` FOR EACH ROW
 BEGIN
+	DECLARE date_month DATE;
+	DECLARE nBlog INT;
+
 	UPDATE blog_category SET n_blog = n_blog + 1 WHERE id = NEW.category_id;
-	UPDATE user SET n_blog = n_blog + 1 WHERE id = NEW.user_id;
+	UPDATE blog_stat SET n_blog = n_blog + 1 WHERE user_id = NEW.user_id;
+
+	SET @date_month = STR_TO_DATE(CONCAT(YEAR(NEW.create_date), '-', MONTH(NEW.create_date), '-01'), '%Y-%m-%d');
+	SELECT COALESCE(SUM(n_blog), 0) FROM blog_month WHERE user_id = NEW.user_id AND `date` = @date_month INTO @nBlog;
+	IF @nBlog = 0 THEN
+		INSERT INTO blog_month (user_id, `date`, n_blog) VALUES (NEW.user_id, @date_month, 1);
+	ELSE
+		UPDATE blog_month SET n_blog = n_blog + 1 WHERE `date` = @date_month AND user_id = NEW.user_id;
+	END IF;
+
+	UPDATE blog_type SET n_blog = n_blog + 1 WHERE `type` = NEW.`type` AND user_id = NEW.user_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_comment_like_ADEL` AFTER DELETE ON `blog_comment_like` FOR EACH ROW
 BEGIN
 	UPDATE blog_comment SET n_like = n_like - 1 WHERE id = OLD.comment_id;
 END
+
 USE `opencomm`;
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` TRIGGER `blog_comment_like_AINS` AFTER INSERT ON `blog_comment_like` FOR EACH ROW
@@ -70,8 +126,16 @@ END
 2014-09-25
 添加博客数据库表
 ============================================
-ALTER TABLE `opencomm`.`user`
-ADD COLUMN `n_blog` INT 0 AFTER `path`;
+CREATE TABLE `blog_stat` (
+  `user_id` bigint(20) NOT NULL,
+  `rank` bigint(20) DEFAULT NULL,
+  `n_view` bigint(20) DEFAULT NULL,
+  `n_blog` int(11) DEFAULT NULL,
+  `n_comment` bigint(20) DEFAULT NULL,
+  `n_like` bigint(20) DEFAULT NULL,
+  KEY `fk_blog_stat_user_idx` (`user_id`),
+  CONSTRAINT `fk_blog_stat_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `blog_category` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -85,6 +149,7 @@ CREATE TABLE `blog` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) DEFAULT NULL,
   `category_id` bigint(20) DEFAULT NULL,
+  `type` CHAR(1) DEFAULT NULL,
   `top` bit(1) DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
