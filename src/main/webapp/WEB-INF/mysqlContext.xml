@@ -35,7 +35,7 @@
 	
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 	    <property name="sqlSessionFactoryBeanName" value="mysqlSqlSessionFactory"></property>
-		<property name="basePackage" value="org.mu.community.common.repository;org.mu.community.coop.repository;org.mu.community.code.repository;org.mu.community.blog.repository" />
+		<property name="basePackage" value="org.mu.community.common.repository;org.mu.community.coop.repository;org.mu.community.code.repository;org.mu.community.blog.repository;" />
 	</bean>
 
 	<bean id="mysqltransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

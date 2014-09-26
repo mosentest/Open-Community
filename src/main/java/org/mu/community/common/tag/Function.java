@@ -1,7 +1,10 @@
 package org.mu.community.common.tag;
 
 import org.mu.community.common.enumtype.FileType;
+import org.mu.community.common.util.DateUtil;
 import org.mu.community.common.util.FileUtil;
+
+import java.util.Date;
 
 public class Function {
 
@@ -32,5 +35,13 @@ public class Function {
 		return FileUtil.toDataURI(FileUtil.getFileAsStream(fullPath), 
 				path.substring(path.lastIndexOf('.') + 1));
 	}
-	
+
+    public static String toDate(Date date) {
+        return DateUtil.getFormattedString(date);
+    }
+
+    public static String toMonth(Date date) {
+        return DateUtil.parseMonth(date);
+    }
+
 }

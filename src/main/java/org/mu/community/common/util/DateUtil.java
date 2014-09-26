@@ -13,6 +13,8 @@ public class DateUtil {
 	private static final SimpleDateFormat dateFormat;
 	
 	private static final SimpleDateFormat datetimeFormat;
+
+    private static final SimpleDateFormat monthFormat;
 	
 	private static final Random random;
 	
@@ -51,6 +53,7 @@ public class DateUtil {
 	static {
 		dateFormat = new SimpleDateFormat("yy-MM-dd");
 		datetimeFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        monthFormat = new SimpleDateFormat("yyyy-MM");
 		random = new Random();
 	}
 	
@@ -231,5 +234,25 @@ public class DateUtil {
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
+
+    public static Date parseMonth(String month) {
+        Date date = null;
+        try {
+            date = monthFormat.parse(month);
+        } catch (Exception e) {
+            date = null;
+        }
+        return date;
+    }
+
+    public static String parseMonth(Date date) {
+        return monthFormat.format(date);
+    }
+
+    public static Date add(Date date, int field, int value) {
+        Calendar calendar = getCalendar(date);
+        calendar.add(field, value);
+        return calendar.getTime();
+    }
 		
 }

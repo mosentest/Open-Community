@@ -17,11 +17,23 @@
 		<function-class>org.mu.community.common.tag.Function</function-class>
 		<function-signature>java.lang.String sizeInfo(java.lang.Long)</function-signature>
 	</function>
-	
-	<function>
-		<name>profile</name>
-		<function-class>org.mu.community.common.tag.Function</function-class>
-		<function-signature>java.lang.String profile(java.lang.String)</function-signature>
-	</function>
+
+    <function>
+        <name>profile</name>
+        <function-class>org.mu.community.common.tag.Function</function-class>
+        <function-signature>java.lang.String profile(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>toMonth</name>
+        <function-class>org.mu.community.common.tag.Function</function-class>
+        <function-signature>java.lang.String toMonth(java.util.Date))</function-signature>
+    </function>
+
+    <function>
+        <name>toDate</name>
+        <function-class>org.mu.community.common.tag.Function</function-class>
+        <function-signature>java.lang.String toDate(java.util.Date))</function-signature>
+    </function>
 	
 </taglib> 

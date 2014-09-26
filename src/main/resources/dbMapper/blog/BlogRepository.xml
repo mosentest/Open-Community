@@ -27,6 +27,15 @@
       JOIN blog_category ON blog_category.id = blog.category_id
     </sql>
 
+    <sql id="listBlog">
+      SELECT
+        blog.id,
+        blog.create_date,
+        blog.title,
+        blog.n_view
+      FROM blog
+    </sql>
+
     <sql id="minimalBlog">
       SELECT
         blog.id,
@@ -94,6 +103,24 @@
         FROM blog_month
     </sql>
 
+    <sql id="typeData">
+        SELECT
+            `type`,
+            n_blog
+        FROM blog_type
+    </sql>
+
+    <sql id="blogStat">
+        SELECT
+          user_id,
+          n_view,
+          n_like,
+          n_blog,
+          title,
+          description
+        FROM blog_stat
+    </sql>
+
     <resultMap id="blogMap" type="Blog">
         <id property="id" column="id" />
         <result property="create" column="create_date"/>
@@ -152,9 +179,23 @@
         </association>
     </resultMap>
 
-    <resultMap id="monthDataMap" type="BlogMonthData">
+    <resultMap id="monthDataMap" type="BlogData">
         <result property="month" column="month"/>
         <result property="nBlog" column="n_blog"/>
+    </resultMap>
+
+    <resultMap id="typeDataMap" type="BlogData">
+        <result property="type" column="type" typeHandler="org.mu.community.common.dbutil.BlogTypeHandler"/>
+        <result property="nBlog" column="n_blog"/>
+    </resultMap>
+
+    <resultMap id="blogStatMap" type="BlogStat">
+        <result property="user" column="user_id"/>
+        <result property="nBlog" column="n_blog"/>
+        <result property="nView" column="n_view"/>
+        <result property="nLike" column="n_like"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
     </resultMap>
 
     <select id="getCategories" resultMap="categoryMap">
@@ -163,26 +204,29 @@
     </select>
 
     <select id="countBlogByMonth" resultType="int">
-        SELECT COUNT(*) FROM blog WHERE blog.user_id = #{user} AND <![CDATA[ blog.create_date >= #{from} AND blog.create_date <= #{to} ]]>
+        SELECT COUNT(*) FROM blog WHERE blog.user_id = #{user} AND <![CDATA[ blog.create_date >= #{from} AND blog.create_date < #{to} ]]>
     </select>
 
     <select id="getBlogsByUser" resultMap="blogMap">
-        <include refid="minimalBlog"/>
+        <if test="listMode"><include refid="listBlog"/></if>
+        <if test="!listMode"><include refid="minimalBlog"/></if>
         WHERE blog.user_id = #{user}
         ORDER BY blog.create_date
         LIMIT #{offset}, #{size}
     </select>
 
     <select id="getBlogByCategory" resultMap="blogMap">
-        <include refid="minimalBlog"/>
+        <if test="listMode"><include refid="listBlog"/></if>
+        <if test="!listMode"><include refid="minimalBlog"/></if>
         WHERE blog.user_id = #{user} AND blog.category_id = #{category}
         ORDER BY blog.create_date
         LIMIT #{offset}, #{size}
     </select>
 
     <select id="getBlogByMonth" resultMap="blogMap">
-        <include refid="minimalBlog"/>
-        WHERE blog.user_id = #{user} AND <![CDATA[ blog.create_date >= #{from} AND blog.create_date <= #{to} ]]>
+        <if test="listMode"><include refid="listBlog"/></if>
+        <if test="!listMode"><include refid="minimalBlog"/></if>
+        WHERE blog.user_id = #{user} AND <![CDATA[ blog.create_date >= #{from} AND blog.create_date < #{to} ]]>
         ORDER BY blog.create_date
         LIMIT #{offset}, #{size}
     </select>
@@ -211,6 +255,22 @@
         WHERE user_id = #{user}
         ORDER BY `date` DESC
         LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getTypeData" resultMap="typeDataMap">
+        <include refid="typeData"/>
+        WHERE user_id = #{user}
+        ORDER BY `type` ASC
+    </select>
+
+    <select id="getBlogStat" resultMap="blogStatMap">
+        <include refid="blogStat"/>
+        WHERE user_id = #{user}
+    </select>
+
+    <select id="getBlogCategory" resultMap="categoryMap">
+        <include refid="category"/>
+        WHERE id = #{category}
     </select>
 
 </mapper>

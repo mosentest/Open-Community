@@ -43,6 +43,10 @@ public class UserService {
 	public long getId(String path) {
 		return userRepository.getId(path);
 	}
+
+    public User getUserByPath(String path) {
+        return userRepository.getUserByPath(path);
+    }
 	
 	public User getUser(String account) {
 		return userRepository.getUserByAccount(account);

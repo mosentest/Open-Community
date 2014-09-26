@@ -36,17 +36,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="source/index.html" class="navbar-brand">Source Repository</a>
+      <a href="source/index.html" class="navbar-brand">Blog Spot</a>
     </div>
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li class="${param.nav eq 'home' ? 'active' : ''}"><a href="source/index.html">Home</a></li>
-        <li class="${param.nav eq 'category' ? 'active' : ''}"><a href="source/categories.html">Categories</a></li>
-        <li class="${param.nav eq 'org.mu.community.common.tag' ? 'active' : ''}"><a href="source/tags.html">Tags</a></li>
-        <li class="${param.nav eq 'library' ? 'active' : ''}"><a href="source/libraries.html">Libraries</a></li>
-        <li class="${param.nav eq 'code' ? 'active' : ''}"><a href="source/code.html">Source Files</a></li>
-        <li class="${param.nav eq 'doc' ? 'active' : ''}"><a href="source/documentation.html">Documentation</a></li>
-        <li class="${param.nav eq 'upload' ? 'active' : ''}"><a href="source/upload.html">Upload Library</a></li>
       </ul>
       <security:authorize access="isAuthenticated()">
         <ul class="nav navbar-nav navbar-right">
@@ -54,9 +48,8 @@
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><security:authentication property="principal.account"/><span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Resources</a></li>
+              <li><a href="#">Blogs</a></li>
               <li><a href="#">Notifications</a></li>
-              <li><a href="#">Projects</a></li>
               <li class="divider"></li>
               <li><a href="#">Settings</a></li>
               <li class="divider"></li>

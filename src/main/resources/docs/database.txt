@@ -128,14 +128,14 @@ END
 ============================================
 CREATE TABLE `blog_stat` (
   `user_id` bigint(20) NOT NULL,
-  `rank` bigint(20) DEFAULT NULL,
   `n_view` bigint(20) DEFAULT NULL,
-  `n_blog` int(11) DEFAULT NULL,
+  `n_blog` bigint(20) DEFAULT NULL,
   `n_comment` bigint(20) DEFAULT NULL,
   `n_like` bigint(20) DEFAULT NULL,
   KEY `fk_blog_stat_user_idx` (`user_id`),
   CONSTRAINT `fk_blog_stat_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `blog_category` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,

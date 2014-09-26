@@ -13,16 +13,20 @@ import java.util.List;
 @Repository("blogRepository")
 public interface BlogRepository {
 
+    public BlogStat getBlogStat(long user);
+
+    public BlogCategory getBlogCategory(long category);
+
     public List<BlogCategory> getCategories(long user);
 
     public int countBlogByMonth(@Param("user") long user, @Param("from") Date from, @Param("to") Date to);
 
-    public List<Blog> getBlogsByUser(@Param("user") long user, @Param("offset") int offset, @Param("size") int size);
+    public List<Blog> getBlogsByUser(@Param("user") long user, @Param("listMode") boolean listMode, @Param("offset") int offset, @Param("size") int size);
 
-    public List<Blog> getBlogByCategory(@Param("user") long user, @Param("category") long category,
+    public List<Blog> getBlogByCategory(@Param("user") long user, @Param("category") long category, @Param("listMode") boolean listMode,
                                         @Param("offset") int offset, @Param("size") int size);
 
-    public List<Blog> getBlogByMonth(@Param("user") long user, @Param("from") Date from, @Param("to") Date to,
+    public List<Blog> getBlogByMonth(@Param("user") long user, @Param("from") Date from, @Param("to") Date to, @Param("listMode") boolean listMode,
                                      @Param("offset") int offset, @Param("size") int size);
 
     public Blog getBlog(@Param("user") long user, @Param("blog") long blog, @Param("auth") long auth);
@@ -32,6 +36,8 @@ public interface BlogRepository {
 
     public List<BlogReply> getCommentReplies(@Param("comment") long comment, @Param("offset") int offset, @Param("size") int size);
 
-    public List<BlogMonthData> getMonthData(@Param("user") long user, @Param("offset") int offset, @Param("size") int size);
+    public List<BlogData> getMonthData(@Param("user") long user, @Param("offset") int offset, @Param("size") int size);
+
+    public List<BlogData> getTypeData(@Param("user") long user);
 
 }

@@ -5,9 +5,11 @@ import java.util.Date;
 /**
  * Created by Muu on 2014/9/25.
  */
-public class BlogMonthData {
+public class BlogData {
 
     private Date month;
+
+    private BlogType type;
 
     private int nBlog;
 
@@ -25,5 +27,13 @@ public class BlogMonthData {
 
     public void setnBlog(int nBlog) {
         this.nBlog = nBlog;
+    }
+
+    public BlogType getType() {
+        return type;
+    }
+
+    public void setType(BlogType type) {
+        this.type = type;
     }
 }
