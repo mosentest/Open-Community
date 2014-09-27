@@ -66,7 +66,7 @@ public class BlogController {
         model.put("typeDataList", blogService.getTypeData(user.getId()));
         model.put("categoryDataList", blogService.getCategories(user.getId()));
         model.put("blogList", blogList);
-        model.put("recentCommentList", null);
+        model.put("recentCommentList", blogService.getRecentComments(user.getId()));
         if (pn != 0) {
             model.put("pn", pn);
         }

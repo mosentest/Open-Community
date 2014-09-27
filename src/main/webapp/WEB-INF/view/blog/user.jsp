@@ -43,9 +43,6 @@
               <td colspan="2">Blogs</td>
               <td colspan="2">${blogStat.nBlog}</td>
             </tr>
-            <tr class="none-border">
-              <td colspan="2">Comments</td>
-              <td colspan="2">${blogStat.nComment}</td>
             </tr>
             <tr class="none-border">
               <td colspan="2">Likes</td>
@@ -83,9 +80,13 @@
       <ul class="list-group">
         <li class="list-group-item">Ranking</li>
       </ul>
-      <div class="panel panel-default">
-        <div class="panel-heading">Recent comments</div>
-        <div class="panel-body"></div>
+      <div class="list-group">
+        <c:forEach items="${recentCommentList}" var="comment">
+          <a href="#" class="list-group-item">
+              <p class="list-group-item-text">${comment.user.account} : ${comment.content}</p>
+              <p class="list-group-item-data">${sf:toDate(comment.create)}</p>
+          </a>
+        </c:forEach>
       </div>
     </div>
     <div class="col-lg-6">

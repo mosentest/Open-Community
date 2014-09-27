@@ -17,7 +17,9 @@
 		<property name="dbName" value="${mongoDB.db}"/>
 		<property name="packages" value="org.mu.community.code.entity"/>
 	</bean>
-	
+
+    <bean id="redisManager" class="org.mu.community.redis.core.RedisManager" destroy-method="destroy"/>
+
 	<context:annotation-config />  
  	<context:component-scan base-package="org.mu">
 		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />

@@ -1,10 +1,8 @@
 package org.mu.community.blog.service;
 
-import org.mu.community.blog.entity.Blog;
-import org.mu.community.blog.entity.BlogCategory;
-import org.mu.community.blog.entity.BlogData;
-import org.mu.community.blog.entity.BlogStat;
+import org.mu.community.blog.entity.*;
 import org.mu.community.blog.repository.BlogModifyRepository;
+import org.mu.community.blog.repository.BlogRedisRepository;
 import org.mu.community.blog.repository.BlogRepository;
 import org.mu.community.common.dbutil.Page;
 import org.mu.community.common.exception.InfoException;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,11 +26,16 @@ public class BlogService {
 
     private BlogModifyRepository blogModifyRepository;
 
+    private BlogRedisRepository blogRedisRepository;
+
+    public List<BlogComment> getRecentComments(long user) {
+        List<Long> idList = blogRedisRepository.getRecentComment(user);
+        return blogRepository.getCommentsById(user, idList);
+    }
+
     @Transactional
     public Page<Blog> getRecentBlogs(long user, boolean listMode, int page, int size) throws InfoException {
         Page<Blog> blogList = new Page<>();
-        System.out.println(blogRepository);
-        System.out.println(blogRepository.getBlogStat(user));
         blogList.setTotalElement(blogRepository.getBlogStat(user).getnBlog(), size);
         blogList.setContent(blogRepository.getBlogsByUser(user, listMode, page * size, size));
         blogList.setCurrentPage(page);
@@ -85,5 +89,10 @@ public class BlogService {
     @Autowired
     public void setBlogModifyRepository(BlogModifyRepository blogModifyRepository) {
         this.blogModifyRepository = blogModifyRepository;
+    }
+
+    @Autowired
+    public void setBlogRedisRepository(BlogRedisRepository blogRedisRepository) {
+        this.blogRedisRepository = blogRedisRepository;
     }
 }

@@ -68,9 +68,23 @@
         user.account AS user_account,
         user.path AS user_path,
         user.profile AS user_profile,
-	    (SELECT COUNT(*) > 0 FROM blog_comment_like where blog_comment_like.comment_id = blog_comment.id and blog_comment_like.user_id = #{auth}) AS liked
+        (SELECT COUNT(*) > 0 FROM blog_comment_like where blog_comment_like.comment_id = blog_comment.id and blog_comment_like.user_id = #{auth}) AS liked
       FROM blog_comment
-      JOIN user ON user.id = blog.user_id
+      JOIN user ON user.id = blog_comment.user_id
+    </sql>
+
+    <sql id="minimalComment">
+        SELECT
+            blog_comment.id,
+            blog_comment.blog_id,
+            blog_comment.create_date,
+            blog_comment.content,
+            user.id AS user_id,
+            user.account AS user_account,
+            user.path AS user_path,
+            user.profile AS user_profile
+        FROM blog_comment
+        JOIN user ON user.id = blog_comment.user_id
     </sql>
 
     <sql id="category">
@@ -271,6 +285,14 @@
     <select id="getBlogCategory" resultMap="categoryMap">
         <include refid="category"/>
         WHERE id = #{category}
+    </select>
+
+    <select id="getCommentsById" resultMap="commentMap">
+        <include refid="minimalComment"/>
+        WHERE user_id = #{user} AND blog_comment.id IN
+        <foreach item="item" collection="idList"  open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

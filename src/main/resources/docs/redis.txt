@@ -1,0 +1,6 @@
+recent comment:
+    key : rbc:{userId}
+    type: list
+    max length: 6
+    LPUSH : append to left
+    RPOP : pop from right

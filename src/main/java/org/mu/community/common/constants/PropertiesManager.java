@@ -39,13 +39,21 @@ public class PropertiesManager {
 		}
 		return Long.parseLong(value);
 	}
-	
-	public static int getIntProperty(String key, int defaultValue) {
-		String value = properties.getProperty(key);
-		if (value == null) {
-			return defaultValue;
-		}
-		return Integer.parseInt(value);
-	}
+
+    public static int getIntProperty(String key, int defaultValue) {
+        String value = properties.getProperty(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        return Integer.parseInt(value);
+    }
+
+    public static boolean getBooleanProperty(String key, boolean defaultValue) {
+        String value = properties.getProperty(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        return Boolean.parseBoolean(value);
+    }
 	
 }

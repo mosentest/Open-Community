@@ -31,7 +31,7 @@ public interface BlogRepository {
 
     public Blog getBlog(@Param("user") long user, @Param("blog") long blog, @Param("auth") long auth);
 
-    public List<BlogComment> getBlogComments(@Param("blog") long blog, @Param("auth") long auth,
+    public List<BlogComment> getBlogComments(@Param("blog") long blog, @Param("auth") Long auth,
                                              @Param("offset") int offset, @Param("size") int size);
 
     public List<BlogReply> getCommentReplies(@Param("comment") long comment, @Param("offset") int offset, @Param("size") int size);
@@ -39,5 +39,7 @@ public interface BlogRepository {
     public List<BlogData> getMonthData(@Param("user") long user, @Param("offset") int offset, @Param("size") int size);
 
     public List<BlogData> getTypeData(@Param("user") long user);
+
+    public List<BlogComment> getCommentsById(@Param("user") long user, @Param("idList") List<Long> idList);
 
 }
