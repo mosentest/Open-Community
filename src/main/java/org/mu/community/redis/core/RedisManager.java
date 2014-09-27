@@ -30,7 +30,7 @@ public class RedisManager {
         poolConfig.setMaxWaitMillis(maxWait);
         poolConfig.setTestOnBorrow(testOnBorrow);
         poolConfig.setTestOnReturn(testOnReturn);
-        pool = new JedisPool(poolConfig, ip, port, 5000);
+        pool = new JedisPool(poolConfig, ip, port, 3000);
     }
 
     public void destroy() {
