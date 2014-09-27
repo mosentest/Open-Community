@@ -10,12 +10,27 @@ import java.util.Random;
 
 public class DateUtil {
 
-	private static final SimpleDateFormat dateFormat;
-	
-	private static final SimpleDateFormat datetimeFormat;
+    private static final ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yy-MM-dd");
+        }
+    };
 
-    private static final SimpleDateFormat monthFormat;
-	
+    private static final ThreadLocal<SimpleDateFormat> datetimeFormat = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+        }
+    };
+
+    private static final ThreadLocal<SimpleDateFormat> monthFormat = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM");
+        }
+    };
+
 	private static final Random random;
 	
 	public static final int MINUTE_ = 60;
@@ -51,9 +66,6 @@ public class DateUtil {
 	private static final int MONTH_DIFF = 43200;
 	
 	static {
-		dateFormat = new SimpleDateFormat("yy-MM-dd");
-		datetimeFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-        monthFormat = new SimpleDateFormat("yyyy-MM");
 		random = new Random();
 	}
 	
@@ -65,7 +77,7 @@ public class DateUtil {
 		}
 		long diff = (current.getTime() - date.getTime()) / DIFF_M;
 		if (format == null) {
-			dateFormat = datetimeFormat;
+			dateFormat = datetimeFormat.get();
 		} else {
 			dateFormat = new SimpleDateFormat(format);
 		}
@@ -104,11 +116,11 @@ public class DateUtil {
 	}
  	
 	public static String getDateFormat(Date date) {
-		return dateFormat.format(date);
+		return dateFormat.get().format(date);
 	}
 	
 	public static String getFormattedString(Date date) {
-		return datetimeFormat.format(date);
+		return datetimeFormat.get().format(date);
 	}
 	
 	public static boolean isSameDay(Date d1, Date d2) {
@@ -123,8 +135,8 @@ public class DateUtil {
 	
 	public static Date getRandomDateInRange(String start, String end) {
 		try {
-			Date d1 = dateFormat.parse(start);
-			Date d2 = dateFormat.parse(end);
+			Date d1 = dateFormat.get().parse(start);
+			Date d2 = dateFormat.get().parse(end);
 			return new Date(d1.getTime() + nextLong(d2.getTime() - d1.getTime()));
 		} catch (Exception e) {
 			return null;
@@ -238,7 +250,7 @@ public class DateUtil {
     public static Date parseMonth(String month) {
         Date date = null;
         try {
-            date = monthFormat.parse(month);
+            date = monthFormat.get().parse(month);
         } catch (Exception e) {
             date = null;
         }
@@ -246,7 +258,7 @@ public class DateUtil {
     }
 
     public static String parseMonth(Date date) {
-        return monthFormat.format(date);
+        return monthFormat.get().format(date);
     }
 
     public static Date add(Date date, int field, int value) {
