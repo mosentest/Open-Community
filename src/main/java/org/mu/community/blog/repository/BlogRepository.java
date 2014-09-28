@@ -3,9 +3,11 @@ package org.mu.community.blog.repository;
 import org.apache.ibatis.annotations.Param;
 import org.mu.community.blog.entity.*;
 import org.springframework.stereotype.Repository;
+import redis.clients.jedis.Tuple;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Muu on 2014/9/25.
@@ -20,6 +22,20 @@ public interface BlogRepository {
     public List<BlogCategory> getCategories(long user);
 
     public int countBlogByMonth(@Param("user") long user, @Param("from") Date from, @Param("to") Date to);
+
+    public long countAll();
+
+    public List<Blog> getPromotedBlogs();
+
+    public List<Blog> getDailyMostViewed(@Param("listMode") boolean listMode, @Param("offset") int offset, @Param("size") int size);
+
+    public List<Blog> getWeeklyMostViewed(@Param("listMode") boolean listMode, @Param("offset") int offset, @Param("size") int size);
+
+    public List<Blog> getMonthlyMostViewed(@Param("listMode") boolean listMode, @Param("offset") int offset, @Param("size") int size);
+
+    public List<Blog> getRecentBlogs(@Param("offset") int offset, @Param("size") int size);
+
+    public List<Blog> getBlogsById(@Param("listMode") boolean listMode, @Param("idList") List<Long> idList);
 
     public List<Blog> getBlogsByUser(@Param("user") long user, @Param("listMode") boolean listMode, @Param("offset") int offset, @Param("size") int size);
 
@@ -40,6 +56,6 @@ public interface BlogRepository {
 
     public List<BlogData> getTypeData(@Param("user") long user);
 
-    public List<BlogComment> getCommentsById(@Param("user") long user, @Param("idList") List<Long> idList);
+    public List<BlogComment> getRecentComments(@Param("user") long user, @Param("auth") long auth, @Param("size") int size);
 
 }

@@ -1,6 +1,18 @@
-recent comment:
-    key : rbc:{userId}
-    type: list
-    max length: 6
-    LPUSH : append to left
-    RPOP : pop from right
+blog:
+    key         : b:{id}
+    type        : hash
+    structure   : ({title}, {user.path}, {type})
+    HSET        : (b:{id} type {type} title {title} upath {user.path})
+recent-blog:
+    key         : recent-blog
+    type        : list
+    structure   : string
+    LPUSH       : append to left
+    LTRIM       : (rb, 0, 19)
+featured-blog: //3 days, reduce score every day
+    key         : featured-blog
+    type        : sorted set
+    structure   : [views(score), id]
+    ZINCRBY     : (fb, 1, {blogId})
+    ZRANGE      : (fb, {offset}, {limit}) WITHSCORES
+//if some blogger has more than N viewers, add basic information to redis

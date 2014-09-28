@@ -3,8 +3,8 @@
 <mapper namespace="org.mu.community.blog.repository.BlogModifyRepository" >
 
     <insert id="createBlog" parameterType="Blog" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO blog (user_id, category_id, `top`, `type`, create_date, update_date, title, summary, content, n_like, n_view, n_reply)
-        VALUES (#{user.id}, #{category.id}, #{top}, #{type,typeHandler=org.mu.community.common.dbutil.BlogTypeHandler}, #{create}, #{update}, #{title}, #{summary}, #{content}, 0, 0, 0)
+        INSERT INTO blog (user_id, category_id, `top`, promoted, `type`, create_date, update_date, title, summary, content, n_like, n_view, n_reply)
+        VALUES (#{user.id}, #{category.id}, #{top}, FALSE, #{type,typeHandler=org.mu.community.common.dbutil.BlogTypeHandler}, #{create}, #{update}, #{title}, #{summary}, #{content}, 0, 0, 0)
     </insert>
 
     <insert id="createCategory" parameterType="BlogCategory">
@@ -25,11 +25,17 @@
         UPDATE blog SET
             category_id = #{category.id},
             `top` = #{top},
+            promoted = #{promoted},
             update_date = #{update},
             title = #{title},
             summary = #{summary},
             content = #{content}
         WHERE id = #{id} AND user_id = #{user.id}
+    </update>
+
+    <update id="view" parameterType="long">
+        UPDATE blog_stat SET n_view = n_view + 1, n_view_day = n_view_day + 1, n_view_week = n_view_week + 1, n_view_month = n_view_month + 1
+        WHERE blog_stat.user_id = #{user}
     </update>
 
     <delete id="deleteCategory">

@@ -60,6 +60,13 @@ function showMessage(type, message) {
 	dialog.slideDown(2000).delay(2000).slideUp(2000);
 }
 
+function tabToggle(current, id, cssClass) {
+    $('.' + cssClass).hide();
+    $('#' + id).show();
+    $(current).parent().siblings().removeClass('active');
+    $(current).parent().addClass('active');
+}
+
 function formDataToArray(form) {
 	var data = {};
 	form.find("input, textarea, select, checkbox, radio").each(function() {

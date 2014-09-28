@@ -119,7 +119,8 @@
             </c:forEach>
           </div>
         </c:if>
-        <source:page page="${blogList}" url="${url}"/>
+        <div class="pull-right"><source:page page="${blogList}" url="${url}"/></div>
+        <div class="clearfix"></div>
       </c:if>
     </div>
   </div>

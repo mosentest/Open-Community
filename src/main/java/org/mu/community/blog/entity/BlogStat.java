@@ -9,6 +9,12 @@ public class BlogStat {
 
     private long nView;
 
+    private long nViewDay;
+
+    private long nViewWeek;
+
+    private long nViewMonth;
+
     private long nBlog;
 
     private long nLike;
@@ -63,5 +69,29 @@ public class BlogStat {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public long getnViewDay() {
+        return nViewDay;
+    }
+
+    public void setnViewDay(long nViewDay) {
+        this.nViewDay = nViewDay;
+    }
+
+    public long getnViewWeek() {
+        return nViewWeek;
+    }
+
+    public void setnViewWeek(long nViewWeek) {
+        this.nViewWeek = nViewWeek;
+    }
+
+    public long getnViewMonth() {
+        return nViewMonth;
+    }
+
+    public void setnViewMonth(long nViewMonth) {
+        this.nViewMonth = nViewMonth;
     }
 }

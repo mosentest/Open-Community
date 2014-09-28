@@ -6,9 +6,11 @@ import org.mu.community.common.dbutil.Page;
 import org.mu.community.common.entity.User;
 import org.mu.community.common.exception.InfoException;
 import org.mu.community.common.exception.NoUserException;
+import org.mu.community.common.security.Authentication;
 import org.mu.community.common.service.UserService;
 import org.mu.community.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class BlogController {
 
+    private static final int SIDE_LIST_SIZE = 8;
+
     private static final int LIST_SIZE = 10;
 
     private static final int MONTH_DATA_SIZE = 12;
@@ -34,13 +38,20 @@ public class BlogController {
 
     private UserService userService;
 
-    @RequestMapping(value = { "blog/home.html", "blog/", "blog" }, method = RequestMethod.GET)
+    @RequestMapping(value = "blog/home.html", method = RequestMethod.GET)
     public ModelAndView home(ModelMap model) {
+        model.put("recentList", blogService.getRecentBlogs(0, SIDE_LIST_SIZE));
+        model.put("viewDayList", blogService.getDailyMostViewed(true, 0, SIDE_LIST_SIZE));
+        model.put("viewWeekList", blogService.getWeeklyMostViewed(true, 0, SIDE_LIST_SIZE));
+        model.put("viewMonthList", blogService.getMonthlyMostViewed(true, 0, SIDE_LIST_SIZE));
+        model.put("featuredList", blogService.getFeaturedBlogs(0, LIST_SIZE));
+        model.put("topBloggerList", blogService.getTopBloggers(0, 6));
         return new ModelAndView("blog/index", model);
     }
 
     @RequestMapping(value = "u/{path}/blogs.html", method = RequestMethod.GET)
-    public ModelAndView user(@PathVariable("path") String path,
+    public ModelAndView user(@AuthenticationPrincipal Authentication auth,
+                             @PathVariable("path") String path,
                              @RequestParam(value = "category", required = false, defaultValue = "0") Long category,
                              @RequestParam(value = "month", required = false) String month,
                              @RequestParam(value = "pn", required = false, defaultValue = "0") Integer pn,
@@ -66,7 +77,7 @@ public class BlogController {
         model.put("typeDataList", blogService.getTypeData(user.getId()));
         model.put("categoryDataList", blogService.getCategories(user.getId()));
         model.put("blogList", blogList);
-        model.put("recentCommentList", blogService.getRecentComments(user.getId()));
+        model.put("recentCommentList", blogService.getRecentComments(user.getId(), auth == null ? 0 : auth.getId(), 6));
         if (pn != 0) {
             model.put("pn", pn);
         }
@@ -78,7 +89,7 @@ public class BlogController {
     }
 
     @RequestMapping(value = "u/{path}/blog/{id}.html", method = RequestMethod.GET)
-    public ModelAndView blog(@PathVariable("path") String path, @PathVariable("id") long id,
+    public ModelAndView blog(@PathVariable("path") String path, @PathVariable("ident") String ident,
                              ModelMap model) {
         return new ModelAndView("blog/blog", model);
     }

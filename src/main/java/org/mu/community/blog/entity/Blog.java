@@ -18,6 +18,8 @@ public class Blog {
 
     private BlogCategory category;
 
+    private boolean promoted;
+
     private boolean top;
 
     private Date create;
@@ -29,6 +31,8 @@ public class Blog {
     private String summary;
 
     private String content;
+
+    private double score;
 
     private int nLike;
 
@@ -168,5 +172,21 @@ public class Blog {
 
     public void setType(BlogType type) {
         this.type = type;
+    }
+
+    public void setPromoted(boolean promoted) {
+        this.promoted = promoted;
+    }
+
+    public boolean isPromoted() {
+        return promoted;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
     }
 }

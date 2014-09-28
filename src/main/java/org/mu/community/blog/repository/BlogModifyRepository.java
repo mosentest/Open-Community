@@ -39,4 +39,6 @@ public interface BlogModifyRepository {
 
     public int dislikeComment(@Param("user") long user, @Param("comment") long comment);
 
+    public void view(long user);
+
 }

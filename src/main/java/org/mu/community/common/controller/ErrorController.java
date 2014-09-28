@@ -1,6 +1,7 @@
 package org.mu.community.common.controller;
 
 import org.mu.community.common.exception.NoUserException;
+import org.mu.community.common.exception.StatusException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +16,11 @@ public class ErrorController implements GenericController {
     @ExceptionHandler(NoUserException.class)
     public ModelAndView nouser(Exception exception) {
         return new ModelAndView("error/nouser", "error", exception.getMessage());
+    }
+
+    @ExceptionHandler(StatusException.class)
+    public String status(StatusException exception) {
+        return "redirect:error/" + exception.getCode();
     }
 
 	@RequestMapping(value = "notfound.html", method = RequestMethod.GET)

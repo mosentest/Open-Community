@@ -7,6 +7,7 @@
         blog.id,
         blog.`top`,
         blog.`type`,
+        blog.promoted,
         blog.create_date,
         blog.update_date,
         blog.title,
@@ -30,16 +31,20 @@
     <sql id="listBlog">
       SELECT
         blog.id,
-        blog.create_date,
         blog.title,
-        blog.n_view
+        blog.`top`,
+        blog.`type`,
+        user.path AS user_path,
+        user.profile AS user_profile
       FROM blog
+      JOIN user ON user.id = blog.user_id
     </sql>
 
     <sql id="minimalBlog">
       SELECT
         blog.id,
         blog.`top`,
+        blog.promoted,
         blog.`type`,
         blog.create_date,
         blog.title,
@@ -128,6 +133,9 @@
         SELECT
           user_id,
           n_view,
+          n_view_day,
+          n_view_week,
+          n_view_month,
           n_like,
           n_blog,
           title,
@@ -140,6 +148,7 @@
         <result property="create" column="create_date"/>
         <result property="update" column="update_date"/>
         <result property="top" column="top"/>
+        <result property="promoted" column="promoted"/>
         <result property="title" column="title"/>
         <result property="type" column="type" typeHandler="org.mu.community.common.dbutil.BlogTypeHandler"/>
         <result property="summary" column="summary"/>
@@ -207,10 +216,53 @@
         <result property="user" column="user_id"/>
         <result property="nBlog" column="n_blog"/>
         <result property="nView" column="n_view"/>
+        <result property="nViewDay" column="n_view_day"/>
+        <result property="nViewWeek" column="n_view_week"/>
+        <result property="nViewMonth" column="n_view_month"/>
         <result property="nLike" column="n_like"/>
         <result property="title" column="title"/>
         <result property="description" column="description"/>
     </resultMap>
+
+    <select id="countAll" resultType="long">
+        SELECT COUNT(*) FROM blog
+    </select>
+
+    <select id="getDailyMostViewed" resultMap="blogMap">
+        <if test="listMode"><include refid="listBlog"/></if>
+        <if test="!listMode"><include refid="minimalBlog"/></if>
+        JOIN blog_view_stat ON blog_view_stat.blog_id = blog.id
+        ORDER BY blog_view_stat.n_view_day DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getWeeklyMostViewed" resultMap="blogMap">
+        <if test="listMode"><include refid="listBlog"/></if>
+        <if test="!listMode"><include refid="minimalBlog"/></if>
+        JOIN blog_view_stat ON blog_view_stat.blog_id = blog.id
+        ORDER BY blog_view_stat.n_view_week DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getMonthlyMostViewed" resultMap="blogMap">
+        <if test="listMode"><include refid="listBlog"/></if>
+        <if test="!listMode"><include refid="minimalBlog"/></if>
+        JOIN blog_view_stat ON blog_view_stat.blog_id = blog.id
+        ORDER BY blog_view_stat.n_view_month DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getRecentBlogs" resultMap="blogMap">
+        <include refid="listBlog"/>
+        ORDER BY blog.id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getPromotedBlogs" resultMap="blogMap">
+        <include refid="minimalBlog"/>
+        WHERE blog.promoted = TRUE
+        ORDER BY id DESC
+    </select>
 
     <select id="getCategories" resultMap="categoryMap">
         <include refid="category"/>
@@ -225,7 +277,7 @@
         <if test="listMode"><include refid="listBlog"/></if>
         <if test="!listMode"><include refid="minimalBlog"/></if>
         WHERE blog.user_id = #{user}
-        ORDER BY blog.create_date
+        ORDER BY blog.`top` DESC, blog.id DESC
         LIMIT #{offset}, #{size}
     </select>
 
@@ -233,7 +285,7 @@
         <if test="listMode"><include refid="listBlog"/></if>
         <if test="!listMode"><include refid="minimalBlog"/></if>
         WHERE blog.user_id = #{user} AND blog.category_id = #{category}
-        ORDER BY blog.create_date
+        ORDER BY blog.`top` DESC, blog.id DESC
         LIMIT #{offset}, #{size}
     </select>
 
@@ -241,7 +293,7 @@
         <if test="listMode"><include refid="listBlog"/></if>
         <if test="!listMode"><include refid="minimalBlog"/></if>
         WHERE blog.user_id = #{user} AND <![CDATA[ blog.create_date >= #{from} AND blog.create_date < #{to} ]]>
-        ORDER BY blog.create_date
+        ORDER BY blog.`top` DESC, blog.id DESC
         LIMIT #{offset}, #{size}
     </select>
 
@@ -253,14 +305,14 @@
     <select id="getBlogComments" resultMap="commentMap">
         <include refid="comment"/>
         WHERE blog_comment.blog_id = #{blog}
-        ORDER BY blog_comment.create_date
+        ORDER BY blog_comment.id DESC
         LIMIT #{offset}, #{size}
     </select>
 
     <select id="getCommentReplies" resultMap="replyMap">
         <include refid="reply"/>
         WHERE blog_reply.comment_id = #{comment}
-        ORDER BY blog_reply.create_date
+        ORDER BY blog_reply.id DESC
         LIMIT #{offset}, #{size}
     </select>
 
@@ -287,12 +339,20 @@
         WHERE id = #{category}
     </select>
 
-    <select id="getCommentsById" resultMap="commentMap">
-        <include refid="minimalComment"/>
-        WHERE user_id = #{user} AND blog_comment.id IN
+    <select id="getBlogsById" resultMap="blogMap">
+        <if test="listMode"><include refid="listBlog"/></if>
+        <if test="!listMode"><include refid="minimalBlog"/></if>
+        WHERE blog.id IN
         <foreach item="item" collection="idList"  open="(" separator="," close=")">
             #{item}
         </foreach>
+    </select>
+
+    <select id="getRecentComments" resultMap="commentMap">
+        <include refid="comment"/>
+        WHERE blog_comment.user_id = #{user}
+        ORDER BY blog_comment.id DESC
+        LIMIT 0, #{size}
     </select>
 
 </mapper>

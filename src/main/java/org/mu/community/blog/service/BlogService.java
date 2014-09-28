@@ -10,11 +10,12 @@ import org.mu.community.common.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Tuple;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Muu on 2014/9/25.
@@ -28,9 +29,50 @@ public class BlogService {
 
     private BlogRedisRepository blogRedisRepository;
 
-    public List<BlogComment> getRecentComments(long user) {
-        List<Long> idList = blogRedisRepository.getRecentComment(user);
-        return blogRepository.getCommentsById(user, idList);
+    public Page<Blog> getRecentBlogs(int page, int size) {
+        Page<Blog> blogList = new Page<>();
+        blogList.setTotalElement(blogRepository.countAll(), size);
+        blogList.setCurrentPage(page);
+        blogList.setContent(blogRepository.getRecentBlogs(page * size, size));
+        return blogList;
+    }
+
+    public Page<Blog> getFeaturedBlogs(int page, int size) {
+        Page<Blog> blogList = new Page<>();
+        blogList.setTotalElement(blogRedisRepository.countFeatured(), size);
+        blogList.setCurrentPage(page);
+        List<Long> idList = blogRedisRepository.getFeatured(page * size, size);
+        blogList.setContent(blogRepository.getBlogsById(false, idList));
+        return blogList;
+    }
+
+    public List<Blog> getDailyMostViewed(boolean listMode, int page, int size) {
+        return blogRepository.getDailyMostViewed(listMode, page * size, size);
+    }
+
+    public List<Blog> getWeeklyMostViewed(boolean listMode, int page, int size) {
+        return blogRepository.getWeeklyMostViewed(listMode, page * size, size);
+    }
+
+    public List<Blog> getMonthlyMostViewed(boolean listMode, int page, int size) {
+        return blogRepository.getMonthlyMostViewed(listMode, page * size, size);
+    }
+
+    public List<Blog> getTopBloggers(int page, int size) {
+        return null;
+    }
+
+    public Blog getBlog(long user, long auth, long id) throws InfoException {
+        Blog blog = blogRepository.getBlog(user, id, auth);
+        if (blog == null) {
+            return null;
+        }
+        blogModifyRepository.view(user);
+        return blog;
+    }
+
+    public List<BlogComment> getRecentComments(long user, long auth, int size) {
+        return blogRepository.getRecentComments(user, auth, size);
     }
 
     @Transactional
